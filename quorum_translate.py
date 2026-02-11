@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import json
 import os
 import re
@@ -10,7 +11,7 @@ import time
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 from openai import OpenAI
 
@@ -18,9 +19,9 @@ DEFAULT_MODEL = "x-ai/grok-4.1-fast"
 DEFAULT_ITERATIONS = 2
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 FINALIZER_WEIGHTS = {
-    "faithfulness": 0.30,
-    "readability": 0.35,
-    "modernity": 0.35,
+    "faithfulness": 0.20,
+    "readability": 0.60,
+    "modernity": 0.20,
 }
 
 # Plutarch, Theseus 1.1-1.3
@@ -64,6 +65,21 @@ AGENTS = [
     Agent("readable", "Readability-First", "readability"),
     Agent("modern", "Modernity-First", "modernity"),
 ]
+
+
+def run_agent_tasks_parallel(
+    agents: list[Agent],
+    task_fn: Callable[[Agent], dict[str, Any]],
+) -> dict[str, dict[str, Any]]:
+    if not agents:
+        return {}
+    results: dict[str, dict[str, Any]] = {}
+    with ThreadPoolExecutor(max_workers=len(agents)) as pool:
+        future_to_agent = {pool.submit(task_fn, agent): agent for agent in agents}
+        for future in as_completed(future_to_agent):
+            agent = future_to_agent[future]
+            results[agent.key] = future.result()
+    return results
 
 
 def load_dotenv(path: Path) -> None:
@@ -310,6 +326,14 @@ def run_quorum(
 ) -> dict[str, Any]:
     paragraphs: list[dict[str, Any]] = []
 
+    def score_line(scores: Any) -> str:
+        if not isinstance(scores, dict):
+            return "n/a"
+        f = scores.get("faithfulness", "n/a")
+        r = scores.get("readability", "n/a")
+        m = scores.get("modernity", "n/a")
+        return f"faithfulness={f}, readability={r}, modernity={m}"
+
     for idx, greek in enumerate(greek_paragraphs, start=1):
         if verbose:
             print(f"[paragraph {idx}] initial translations...", file=sys.stderr)
@@ -317,9 +341,13 @@ def run_quorum(
         current: dict[str, str] = {}
         agent_logs: dict[str, Any] = {}
 
-        for agent in AGENTS:
+        def initial_task(agent: Agent) -> dict[str, Any]:
             system, user = initial_translation_prompt(agent, greek, idx)
-            result = call_json(client, model, system, user, temperature=0.45)
+            return call_json(client, model, system, user, temperature=0.45)
+
+        initial_results = run_agent_tasks_parallel(AGENTS, initial_task)
+        for agent in AGENTS:
+            result = initial_results[agent.key]
             current[agent.key] = str(result.get("translation", "")).strip()
             agent_logs[agent.key] = {
                 "priority": agent.priority,
@@ -327,6 +355,18 @@ def run_quorum(
                 "debates": [],
                 "revisions": [],
             }
+            if verbose:
+                print(f"[paragraph {idx}] [{agent.key}] initial translation:", file=sys.stderr)
+                print(current[agent.key], file=sys.stderr)
+                print(
+                    f"[paragraph {idx}] [{agent.key}] initial summary: {result.get('summary', '')}",
+                    file=sys.stderr,
+                )
+                print(
+                    f"[paragraph {idx}] [{agent.key}] initial scores: "
+                    f"{score_line(result.get('self_scores'))}",
+                    file=sys.stderr,
+                )
 
         debate_round_summaries: list[dict[str, Any]] = []
 
@@ -334,15 +374,50 @@ def run_quorum(
             if verbose:
                 print(f"[paragraph {idx}] debate iteration {it}...", file=sys.stderr)
 
-            round_debates: dict[str, Any] = {}
-            for agent in AGENTS:
+            def debate_task(agent: Agent) -> dict[str, Any]:
                 system, user = debate_prompt(agent, greek, idx, current, it)
-                debate = call_json(client, model, system, user, temperature=0.35)
-                round_debates[agent.key] = debate
+                return call_json(client, model, system, user, temperature=0.35)
+
+            round_debates = run_agent_tasks_parallel(AGENTS, debate_task)
+            for agent in AGENTS:
+                debate = round_debates[agent.key]
                 agent_logs[agent.key]["debates"].append(debate)
+                if verbose:
+                    print(
+                        f"[paragraph {idx}] [iter {it}] [{agent.key}] debate summary: "
+                        f"{debate.get('round_summary', '')}",
+                        file=sys.stderr,
+                    )
+                    print(
+                        f"[paragraph {idx}] [iter {it}] [{agent.key}] revision plan: "
+                        f"{debate.get('self_revision_plan', '')}",
+                        file=sys.stderr,
+                    )
+                    critiques = debate.get("critiques", [])
+                    if isinstance(critiques, list):
+                        for critique in critiques:
+                            if not isinstance(critique, dict):
+                                continue
+                            target = critique.get("agent", "unknown")
+                            strengths = critique.get("strengths", "")
+                            concerns = critique.get("concerns", "")
+                            scores = score_line(critique.get("scores"))
+                            print(
+                                f"[paragraph {idx}] [iter {it}] [{agent.key}] critique of [{target}] "
+                                f"scores: {scores}",
+                                file=sys.stderr,
+                            )
+                            print(
+                                f"[paragraph {idx}] [iter {it}] [{agent.key}] critique strengths: {strengths}",
+                                file=sys.stderr,
+                            )
+                            print(
+                                f"[paragraph {idx}] [iter {it}] [{agent.key}] critique concerns: {concerns}",
+                                file=sys.stderr,
+                            )
 
             revised: dict[str, str] = {}
-            for agent in AGENTS:
+            def revision_task(agent: Agent) -> dict[str, Any]:
                 system, user = revision_prompt(
                     agent=agent,
                     greek=greek,
@@ -352,9 +427,29 @@ def run_quorum(
                     own_previous=current[agent.key],
                     iteration=it,
                 )
-                revision = call_json(client, model, system, user, temperature=0.45)
+                return call_json(client, model, system, user, temperature=0.45)
+
+            revision_results = run_agent_tasks_parallel(AGENTS, revision_task)
+            for agent in AGENTS:
+                revision = revision_results[agent.key]
                 revised[agent.key] = str(revision.get("translation", "")).strip()
                 agent_logs[agent.key]["revisions"].append(revision)
+                if verbose:
+                    print(
+                        f"[paragraph {idx}] [iter {it}] [{agent.key}] revised translation:",
+                        file=sys.stderr,
+                    )
+                    print(revised[agent.key], file=sys.stderr)
+                    print(
+                        f"[paragraph {idx}] [iter {it}] [{agent.key}] change summary: "
+                        f"{revision.get('change_summary', '')}",
+                        file=sys.stderr,
+                    )
+                    print(
+                        f"[paragraph {idx}] [iter {it}] [{agent.key}] revised scores: "
+                        f"{score_line(revision.get('self_scores'))}",
+                        file=sys.stderr,
+                    )
 
             debate_round_summaries.append(
                 {
@@ -393,6 +488,22 @@ def run_quorum(
             finalizer_weights=FINALIZER_WEIGHTS,
         )
         final_result = call_json(client, model, system, user, temperature=0.4)
+        if verbose:
+            print(f"[paragraph {idx}] final candidate agent versions:", file=sys.stderr)
+            for agent in AGENTS:
+                print(f"[paragraph {idx}] [{agent.key}] {current[agent.key]}", file=sys.stderr)
+            print(f"[paragraph {idx}] final synthesis translation:", file=sys.stderr)
+            print(str(final_result.get("final_translation", "")).strip(), file=sys.stderr)
+            print(
+                f"[paragraph {idx}] final synthesis justification: "
+                f"{final_result.get('justification', '')}",
+                file=sys.stderr,
+            )
+            print(
+                f"[paragraph {idx}] final synthesis scores: "
+                f"{score_line(final_result.get('balance_scores'))}",
+                file=sys.stderr,
+            )
 
         paragraphs.append(
             {
