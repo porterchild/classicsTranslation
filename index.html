@@ -70,8 +70,8 @@
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(6, minmax(250px, 1fr));
-      min-width: 1530px;
+      grid-template-columns: repeat(7, minmax(250px, 1fr));
+      min-width: 1790px;
       gap: 0.8rem;
     }
 
@@ -123,8 +123,8 @@
 
     @media (max-width: 1200px) {
       .grid {
-        grid-template-columns: repeat(6, minmax(220px, 1fr));
-        min-width: 1350px;
+        grid-template-columns: repeat(7, minmax(220px, 1fr));
+        min-width: 1570px;
       }
     }
 
@@ -134,8 +134,8 @@
       }
 
       .grid {
-        grid-template-columns: repeat(6, minmax(200px, 1fr));
-        min-width: 1230px;
+        grid-template-columns: repeat(7, minmax(200px, 1fr));
+        min-width: 1430px;
       }
     }
   </style>
@@ -144,7 +144,7 @@
   <main class="page">
     <section class="headline">
       <h1>Plutarch, <em>Parallel Lives</em> (Theseus 1.1-1.3)</h1>
-      <p class="subtitle">Opening passage comparison with six columns: Greek text, literal English (word-level), Dryden/Clough (1859), Stewart/Long (1894), Perrin (1914), and AI-Modern English.</p>
+      <p class="subtitle">Opening passage comparison with seven columns: Greek text, literal English (word-level), Dryden/Clough (1859), Stewart/Long (1894), Perrin (1914), AI One-Shot Modern English, and AI Quorum-Modern English.</p>
       <p class="subtitle">Greek source: <a href="https://el.wikisource.org/wiki/%CE%92%CE%AF%CE%BF%CE%B9_%CE%A0%CE%B1%CF%81%CE%AC%CE%BB%CE%BB%CE%B7%CE%BB%CE%BF%CE%B9/%CE%98%CE%B7%CF%83%CE%B5%CF%8D%CF%82" target="_blank" rel="noopener noreferrer">Wikisource (Greek)</a></p>
     </section>
 
@@ -195,11 +195,19 @@
       </article>
 
       <article class="card">
-        <h2>AI-Modern English</h2>
+        <h2>AI One-Shot Modern English</h2>
         <p class="meta">Derived from Greek Theseus 1.1-1.3</p>
         <p class="passage">As mapmakers, Sossius Senecio, push unknown regions to the edges of their charts, I do the same in writing these Parallel Lives. In the margins they write notes like "beyond this lie waterless deserts full of wild beasts," or "trackless marsh," or "Scythian cold," or "frozen sea." I have now passed through the periods where reasoned probability can reach and where fact-based history has firm footing. Of what lies farther back, I could well say: "Beyond this are marvels and tragic tales, the realm of poets and myth-makers; certainty and clarity are gone."</p>
         <p class="passage">Still, after publishing my accounts of Lycurgus the lawgiver and Numa the king, it seemed reasonable to go a little higher, to Romulus, since my history had come close to his time. I asked myself, in Aeschylus' words: "Who can be matched against such a man? Whom can I set opposite him? Who is equal to it?" The right counterpart seemed to be the founder of beautiful, renowned Athens set against the father of unconquered, glorious Rome.</p>
         <p class="passage">So let myth be refined by reason until it takes on the look of history. But where it stubbornly scorns plausibility and refuses to blend with what is likely, I ask for fair-minded readers who can receive ancient tradition with patience.</p>
+      </article>
+
+      <article class="card">
+        <h2>AI Quorum-Modern English</h2>
+        <p class="meta">3-agent quorum, 2 debate iterations, model: x-ai/grok-4.1-fast</p>
+        <p class="passage">Just as in geographies, Sosius Senecio, historians cram into the farthest edges of their maps the things escaping their knowledge, appending notes such as "beyond lie waterless and beast-ridden dunes," "unquenchable mire," "Scythian cold," or "frozen sea"; so too for me, in writing the Parallel Lives, having traversed the accessible span of time with plausible reasoning and history grounded in facts, it would be fitting to say of the things above: "beyond that, poets and mythographers range over monstrous and tragic matters, and it no longer has credibility nor clarity."</p>
+        <p class="passage">Since, after publishing the discourse on Lycurgus the lawgiver and Numa the king, we thought it not unreasonable to take up Romulus as well, our history having come close to his times, but as I scanned with such a light (according to Aeschylus): "Who will turn up? Whom shall I set against him? Who is reliable?" it seemed best to oppose and compare the founder of beautiful and much-sung Athens to the father of unconquered and greatly renowned Rome.</p>
+        <p class="passage">It would be well for us, then, to hear the mythical being purified by reason and catch a glimpse of history; but wherever it arrogantly scorns the plausible and refuses the mixture with the probable, we will need discerning listeners who gently welcome the ancient inquiry.</p>
       </article>
     </section>
     </section>
