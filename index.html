@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Plutarch Parallel Lives Translation Comparison</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Noto+Serif:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f7f3eb;
+      --bg-soft: #efe7da;
+      --ink: #2f2419;
+      --ink-soft: #5f4f3b;
+      --accent: #9b4b1f;
+      --card: #fffdf7;
+      --line: #dacdb8;
+      --shadow: rgba(29, 20, 10, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Source Sans 3", "Trebuchet MS", sans-serif;
+      background:
+        radial-gradient(1200px 500px at 20% 0%, #fff8e9 0%, transparent 60%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%);
+      min-height: 100vh;
+    }
+
+    .page {
+      max-width: 1800px;
+      margin: 0 auto;
+      padding: 2rem 1rem 3rem;
+    }
+
+    .headline {
+      background: rgba(255, 252, 243, 0.86);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 1rem 1.2rem;
+      box-shadow: 0 10px 26px -20px var(--shadow);
+      backdrop-filter: blur(2px);
+    }
+
+    h1 {
+      margin: 0 0 0.4rem;
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-size: clamp(1.2rem, 2.5vw, 1.9rem);
+      line-height: 1.25;
+      letter-spacing: 0.01em;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 0.98rem;
+    }
+
+    .grid-wrap {
+      margin-top: 1rem;
+      overflow-x: auto;
+      padding-bottom: 0.4rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(250px, 1fr));
+      min-width: 1530px;
+      gap: 0.8rem;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 0.95rem;
+      box-shadow: 0 16px 24px -26px var(--shadow);
+    }
+
+    .card h2 {
+      margin: 0;
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+
+    .meta {
+      margin-top: 0.2rem;
+      margin-bottom: 0.65rem;
+      color: var(--ink-soft);
+      font-size: 0.83rem;
+    }
+
+    .passage {
+      margin: 0;
+      line-height: 1.6;
+      font-size: 0.98rem;
+    }
+
+    .passage + .passage {
+      margin-top: 0.8rem;
+      padding-top: 0.8rem;
+      border-top: 1px dashed var(--line);
+    }
+
+    .greek {
+      font-family: "Noto Serif", "Times New Roman", serif;
+      font-size: 0.95rem;
+      line-height: 1.72;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 0.15em;
+    }
+
+    @media (max-width: 1200px) {
+      .grid {
+        grid-template-columns: repeat(6, minmax(220px, 1fr));
+        min-width: 1350px;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .page {
+        padding: 1rem 0.75rem 1.5rem;
+      }
+
+      .grid {
+        grid-template-columns: repeat(6, minmax(200px, 1fr));
+        min-width: 1230px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="headline">
+      <h1>Plutarch, <em>Parallel Lives</em> (Theseus 1.1-1.3)</h1>
+      <p class="subtitle">Opening passage comparison with six columns: Greek text, literal English (word-level), Dryden/Clough (1859), Stewart/Long (1894), Perrin (1914), and AI-Modern English.</p>
+      <p class="subtitle">Greek source: <a href="https://el.wikisource.org/wiki/%CE%92%CE%AF%CE%BF%CE%B9_%CE%A0%CE%B1%CF%81%CE%AC%CE%BB%CE%BB%CE%B7%CE%BB%CE%BF%CE%B9/%CE%98%CE%B7%CF%83%CE%B5%CF%8D%CF%82" target="_blank" rel="noopener noreferrer">Wikisource (Greek)</a></p>
+    </section>
+
+    <section class="grid-wrap">
+    <section class="grid">
+      <article class="card">
+        <h2>Greek (Original)</h2>
+        <p class="meta">Plutarch, Theseus 1.1-1.3</p>
+        <p class="passage greek" lang="grc">ὥσπερ ἐν ταῖς γεωγραφίαις, ὦ Σόσσιε Σενεκίων, οἱ ἱστορικοὶ τὰ διαφεύγοντα τὴν γνῶσιν αὐτῶν τοῖς ἐσχάτοις μέρεσι τῶν πινάκων πιεζοῦντες, αἰτίας παραγράφουσιν ὅτι "τὰ δ᾽ ἐπέκεινα θῖνες ἄνυδροι καὶ θηριώδεις" ἢ "πηλὸς ἀϊδνὴς" ἢ "σκυθικὸν κρύος" ἢ "πέλαγος πεπηγός," οὕτως ἐμοὶ περὶ τὴν τῶν βίων τῶν παραλλήλων γραφήν, τὸν ἐφικτὸν εἰκότι λόγῳ καὶ βάσιμον ἱστορίᾳ πραγμάτων ἐχομένῃ χρόνον διελθόντι, περὶ τῶν ἀνωτέρω καλῶς εἶχεν εἰπεῖν· "τὰ δ᾽ ἐπέκεινα τερατώδη καὶ τραγικὰ ποιηταὶ καὶ μυθογράφοι νέμονται, καὶ οὐκέτ᾽ ἔχει πίστιν οὐδὲ σαφήνειαν."</p>
+        <p class="passage greek" lang="grc">ἐπεὶ δὲ τὸν περὶ Λυκούργου τοῦ νομοθέτου καὶ Νομᾶ τοῦ βασιλέως λόγον ἐκδόντες, ἐδοκοῦμεν οὐκ ἂν ἀλόγως τῷ Ῥωμύλῳ προσαναβῆναι, πλησίον τῶν χρόνων αὐτοῦ τῇ ἱστορίᾳ γεγονότες, σκοποῦντι δέ μοι τοιῷδε φωτί (κατ᾽ Αἰσχύλον) τίς ξυμβήσεται; τίν᾽ ἀντιτάξω τῷδε; τίς φερέγγυος; ἐφαίνετο τὸν τῶν καλῶν καὶ ἀοιδίμων οἰκιστὴν Ἀθηνῶν ἀντιστῆσαι καὶ παραβαλεῖν τῷ πατρὶ τῆς ἀνικήτου καὶ μεγαλοδόξου Ῥώμης,</p>
+        <p class="passage greek" lang="grc">εἴη μὲν οὖν ἡμῖν ἐκκαθαιρόμενον λόγῳ τὸ μυθῶδες ὑπακοῦσαι καὶ λαβεῖν ἱστορίας ὄψιν, ὅπου δ᾽ ἂν αὐθαδῶς τοῦ πιθανοῦ περιφρονῇ καὶ μὴ δέχηται τὴν πρὸς τὸ εἰκὸς μῖξιν, εὐγνωμόνων ἀκροατῶν δεησόμεθα καὶ πρᾴως τὴν ἀρχαιολογίαν προσδεχομένων.</p>
+        <p class="meta">Source: <a href="https://el.wikisource.org/w/index.php?title=%CE%92%CE%AF%CE%BF%CE%B9_%CE%A0%CE%B1%CF%81%CE%AC%CE%BB%CE%BB%CE%B7%CE%BB%CE%BF%CE%B9/%CE%98%CE%B7%CF%83%CE%B5%CF%8D%CF%82&action=raw" target="_blank" rel="noopener noreferrer">el.wikisource.org (raw)</a></p>
+      </article>
+
+      <article class="card">
+        <h2>Literal Translation English</h2>
+        <p class="meta">Word-level rendering from Greek; readability not optimized.</p>
+        <p class="passage">Just as in geographies, O Sossius Senecio, the historians, pressing the things escaping their knowledge into the outermost parts of the maps, write marginal explanations that "the things beyond are waterless and beast-filled sand-dunes," or "trackless mire," or "Scythian cold," or "frozen sea," so also for me, in the writing of the Parallel Lives, after passing through the time reachable by likely reasoning and having a footing in a history clinging to deeds, it was fitting to say about the things further back: "the things beyond, monstrous and tragic, poets and myth-writers pasture, and it no longer has trust nor clarity."</p>
+        <p class="passage">But after issuing the discourse about Lycurgus the lawgiver and Numa the king, we thought that not without reason we should climb up toward Romulus, having come near his times with the history; and while I considered, "for such a man (according to Aeschylus) who will be matched? whom shall I set against this one? who is equal?" it appeared right to set and compare against the father of unconquered and great-glorious Rome the founder of fair and much-sung Athens.</p>
+        <p class="passage">May it then be for us that the mythical element, being cleansed by reason, should obey and take on the appearance of history; but wherever it stubbornly despises the persuasive and does not accept mixture with the likely, we shall ask for well-disposed hearers, and ones receiving ancient narration gently.</p>
+      </article>
+
+      <article class="card">
+        <h2>Dryden/Clough</h2>
+        <p class="meta">1859, via Wikisource</p>
+        <p class="passage">As geographers, Sosius Senecio, crowd into the edges of their maps parts of the world which escape their knowledge, adding notes, in the margin, to the effect, that beyond this lie sandy deserts full of wild beasts, unapproachable bogs, Scythian ice, and frozen sea, so, in the chart of my lives, from those periods which probable reasoning can reach to, and where the history of facts can find firm footing, in passing those remote ages which are accessible only to conjecture, I might well say, Beyond this there is nothing but prodigies and fictions, the only inhabitants are the poets and inventors of fables, there is no other certainty, or reality.</p>
+        <p class="passage">After I had published my account of Lycurgus the lawgiver and Numa the king, it seemed to me not unreasonable if, now that my history had brought me down to Romulus, I should pass in review and compare with him, as it were, the man who gave Athens its beautiful and famous city.</p>
+        <p class="passage">May I therefore succeed in purifying fable, making it submit to reason so as to assume the face of history. Where it cannot be reduced to any probable likeness, and refuses to admit any element of the possible, I shall beg my readers to be indulgent to antiquity in its records.</p>
+        <p class="meta">Source: <a href="https://en.wikisource.org/wiki/Plutarch%27s_Lives_%28Clough%29/Life_of_Theseus" target="_blank" rel="noopener noreferrer">en.wikisource.org</a></p>
+      </article>
+
+      <article class="card">
+        <h2>Stewart/Long</h2>
+        <p class="meta">1894, via Project Gutenberg</p>
+        <p class="passage">As geographers crowd into the edges of their maps such parts of the world as have never yet been explored, adding notes in the margin, saying, Beyond this there are sandy deserts, where wild beasts dwell, or impassable morasses, or Scythian snows, or frozen seas: so in this work on Parallel Lives, now that we have gone through those periods where probable reasoning can find firm footing in fact, and where history can gain a clear insight, all beyond this is portentous and fabulous, where poets and romancers wander and nothing can be found true or certain.</p>
+        <p class="passage">Yet, now that I have published the lives of Lykurgus the lawgiver and Numa the king, as I have brought my narrative down in chronology to Romulus, I thought I might well compare with him who made glorious and famous Athens, the father of unconquerable and glorious Rome.</p>
+        <p class="passage">May I be able to purge away the mythical matter, and make it submit to reason and look like history; but where it will not yield to probable argument, and cannot be made to agree with what is possible, I shall ask for indulgent readers, and such as can receive with favour the tales of antiquity.</p>
+        <p class="meta">Source: <a href="https://www.gutenberg.org/ebooks/14033" target="_blank" rel="noopener noreferrer">gutenberg.org</a></p>
+      </article>
+
+      <article class="card">
+        <h2>Perrin</h2>
+        <p class="meta">1914, Loeb-era translation</p>
+        <p class="passage">Just as geographers, Sosius Senecio, crowd into the outlying parts of their maps what escapes their knowledge, adding notes to the effect that beyond this point lie sandy wastes full of wild beasts, and trackless marshes, and Scythian cold, and frozen sea, so in my writing of the Parallel Lives, now that I have traversed those periods in time which are accessible to probable reasoning and afford a basis for a history dealing with facts, I might well say of the earlier periods: Beyond this there is nothing but marvels and unreality, the land of poets and fabulists, where there is no certainty or clear evidence.</p>
+        <p class="passage">After I had published, therefore, my book about Lycurgus the lawgiver and Numa the king, and my history had brought me down to the times of Romulus, it seemed to me not unreasonable to review him and compare with him the man who founded famous and beautiful Athens.</p>
+        <p class="passage">May my fabulous narrative, then, submit to the purifying processes of reason and take on the aspect of history. But in so far as it obstinately disdains probability, and refuses to blend itself with what is plausible, I shall ask for indulgent readers and such as are willing to receive ancient story in a kindly spirit.</p>
+        <p class="meta">Source: <a href="https://lexundria.com/plut_thes/1/prr" target="_blank" rel="noopener noreferrer">lexundria.com</a></p>
+      </article>
+
+      <article class="card">
+        <h2>AI-Modern English</h2>
+        <p class="meta">Derived from Greek Theseus 1.1-1.3</p>
+        <p class="passage">As mapmakers, Sossius Senecio, push unknown regions to the edges of their charts, I do the same in writing these Parallel Lives. In the margins they write notes like "beyond this lie waterless deserts full of wild beasts," or "trackless marsh," or "Scythian cold," or "frozen sea." I have now passed through the periods where reasoned probability can reach and where fact-based history has firm footing. Of what lies farther back, I could well say: "Beyond this are marvels and tragic tales, the realm of poets and myth-makers; certainty and clarity are gone."</p>
+        <p class="passage">Still, after publishing my accounts of Lycurgus the lawgiver and Numa the king, it seemed reasonable to go a little higher, to Romulus, since my history had come close to his time. I asked myself, in Aeschylus' words: "Who can be matched against such a man? Whom can I set opposite him? Who is equal to it?" The right counterpart seemed to be the founder of beautiful, renowned Athens set against the father of unconquered, glorious Rome.</p>
+        <p class="passage">So let myth be refined by reason until it takes on the look of history. But where it stubbornly scorns plausibility and refuses to blend with what is likely, I ask for fair-minded readers who can receive ancient tradition with patience.</p>
+      </article>
+    </section>
+    </section>
+  </main>
+</body>
+</html>
