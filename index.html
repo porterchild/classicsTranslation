@@ -70,8 +70,8 @@
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(7, minmax(250px, 1fr));
-      min-width: 1790px;
+      grid-template-columns: repeat(6, minmax(250px, 1fr));
+      min-width: 1530px;
       gap: 0.8rem;
     }
 
@@ -123,8 +123,8 @@
 
     @media (max-width: 1200px) {
       .grid {
-        grid-template-columns: repeat(7, minmax(220px, 1fr));
-        min-width: 1570px;
+        grid-template-columns: repeat(6, minmax(220px, 1fr));
+        min-width: 1360px;
       }
     }
 
@@ -134,8 +134,8 @@
       }
 
       .grid {
-        grid-template-columns: repeat(7, minmax(200px, 1fr));
-        min-width: 1430px;
+        grid-template-columns: repeat(6, minmax(200px, 1fr));
+        min-width: 1240px;
       }
     }
   </style>
@@ -144,7 +144,7 @@
   <main class="page">
     <section class="headline">
       <h1>Plutarch, <em>Parallel Lives</em> (Theseus 1.1-1.3)</h1>
-      <p class="subtitle">Opening passage comparison with seven columns: Greek text, literal English (word-level), Dryden/Clough (1859), Stewart/Long (1894), AI One-Shot Modern English, AI Quorum-Modern English (0.30/0.35/0.35), and AI Quorum-Modern English (0.20/0.60/0.20).</p>
+      <p class="subtitle">Opening passage comparison with six columns: Greek text, literal English (word-level), Dryden/Clough (1859), Stewart/Long (1894), AI Quorum-Modern English (Preference: 10-year-old readability), and AI Quorum-Modern English (Preference: translation_instructions.txt).</p>
       <p class="subtitle">Greek source: <a href="https://el.wikisource.org/wiki/%CE%92%CE%AF%CE%BF%CE%B9_%CE%A0%CE%B1%CF%81%CE%AC%CE%BB%CE%BB%CE%B7%CE%BB%CE%BF%CE%B9/%CE%98%CE%B7%CF%83%CE%B5%CF%8D%CF%82" target="_blank" rel="noopener noreferrer">Wikisource (Greek)</a></p>
     </section>
 
@@ -186,29 +186,21 @@
       </article>
 
       <article class="card">
-        <h2>AI One-Shot Modern English</h2>
-        <p class="meta">Derived from Greek Theseus 1.1-1.3</p>
-        <p class="passage">As mapmakers, Sossius Senecio, push unknown regions to the edges of their charts, I do the same in writing these Parallel Lives. In the margins they write notes like "beyond this lie waterless deserts full of wild beasts," or "trackless marsh," or "Scythian cold," or "frozen sea." I have now passed through the periods where reasoned probability can reach and where fact-based history has firm footing. Of what lies farther back, I could well say: "Beyond this are marvels and tragic tales, the realm of poets and myth-makers; certainty and clarity are gone."</p>
-        <p class="passage">Still, after publishing my accounts of Lycurgus the lawgiver and Numa the king, it seemed reasonable to go a little higher, to Romulus, since my history had come close to his time. I asked myself, in Aeschylus' words: "Who can be matched against such a man? Whom can I set opposite him? Who is equal to it?" The right counterpart seemed to be the founder of beautiful, renowned Athens set against the father of unconquered, glorious Rome.</p>
-        <p class="passage">So let myth be refined by reason until it takes on the look of history. But where it stubbornly scorns plausibility and refuses to blend with what is likely, I ask for fair-minded readers who can receive ancient tradition with patience.</p>
+        <h2>AI Quorum-Modern English (Preference: 10-Year-Old Readability)</h2>
+        <p class="meta">3-agent quorum, 2 debate iterations, model: x-ai/grok-4.1-fast</p>
+        <p class="meta">User Preference: This should be readable by a 10 year old.</p>
+        <p class="passage">Just like mapmakers, Sosius Senecio, squeeze unknown parts of the world onto the edges of their maps. They add notes saying: "Beyond here are dry sandy deserts full of wild animals," or "endless sticky mud," or "super-cold northern ice," or "frozen sea." That's how it is with my Parallel Lives. After covering times we can reach with smart guesses and real history facts, it would be right to say about the earlier ages: "Beyond that are weird monsters and wild drama that poets and storytellers make up. There's no truth or clear facts anymore."</p>
+        <p class="passage">After we finished writing about Lycurgus the rule-maker and King Numa, it seemed okay to add Romulus too. Our history had reached near his time. But as I thought about this shining hero (like Aeschylus says): Who will fight him? Who can I match against him? Who is strong enough? It felt right to compare the founder of pretty, famous Athens with the father of unbeatable, glorious Rome.</p>
+        <p class="passage">I hope we can clean up the myths with reason, so they obey and look like real history. But wherever they stubbornly ignore what's believable and refuse to blend in anything likely, we'll ask for kind listeners who gently welcome ancient stories.</p>
       </article>
 
       <article class="card">
-        <h2>AI Quorum-Modern English</h2>
+        <h2>AI Quorum-Modern English (Preference: Translation Kernel: Homeric Epic into Modern English...)</h2>
         <p class="meta">3-agent quorum, 2 debate iterations, model: x-ai/grok-4.1-fast</p>
-        <p class="meta">Goal Weighting: faithfulness: 0.30, readability: 0.35, modernity: 0.35</p>
-        <p class="passage">Just as in geographies, Sosius Senecio, historians cram whatever escapes their knowledge into the outermost edges of their maps, appending notes like "beyond, waterless and savage dunes," "unquenchable mud," "Scythian cold," or "frozen sea" - so too, in writing the Parallel Lives, after covering the accessible period through plausible reasoning and history grounded in facts, it would be fitting to say of earlier matters: "beyond, monstrous and tragic things poets and mythographers range over, and it no longer has credibility or clarity."</p>
-        <p class="passage">After publishing our discourse on Lycurgus the lawgiver and Numa the king, it seemed reasonable to add one on Romulus too - we'd drawn near his times in the historical narrative. But as I pondered, a mere light (per Aeschylus): who will step up? Whom to set against him? Who bears surety? It seemed best to match the founder of beautiful and much-sung Athens with the father of unconquered and greatly renowned Rome.</p>
-        <p class="passage">May it then be ours to follow as the mythical is purified by reason and to gain a view of history; but wherever it arrogantly scorns the persuasive and refuses to blend with the probable, we'll need understanding listeners who gently welcome ancient history.</p>
-      </article>
-
-      <article class="card">
-        <h2>AI Quorum-Modern English (0.20/0.60/0.20)</h2>
-        <p class="meta">3-agent quorum, 2 debate iterations, model: x-ai/grok-4.1-fast</p>
-        <p class="meta">Goal Weighting: faithfulness: 0.20, readability: 0.60, modernity: 0.20</p>
-        <p class="passage">Just as in geographies, Sosius Senecio, historians cram the outermost edges of their maps with explanations for things beyond their knowledge - such as "beyond lie waterless and savage sands," "unquenchable mud," "Scythian cold," or "frozen sea" - so too, in writing the Parallel Lives, after covering the accessible stretch of time with plausible reasoning and solid, fact-based history, it would be fitting to say of the earlier matters: "Beyond that lie monstrous and tragic things, the domain of poets and mythographers, where credibility and clarity no longer hold."</p>
-        <p class="passage">After publishing the discourse on Lycurgus the lawgiver and King Numa, it seemed reasonable to include Romulus as well, since our history had now reached times close to his. But as I pondered - in such a light, in the words of Aeschylus - "Who will turn up? Whom shall I set against him? Who is trustworthy?" - it appeared fitting to match the founder of beautiful and renowned Athens against the father of unconquered and greatly glorious Rome.</p>
-        <p class="passage">It would be well for us, then, to hear the mythical purified by reason and to gain a view of history; but wherever it arrogantly scorns the plausible and refuses to blend with the probable, we shall need understanding listeners who gently welcome the antiquarian inquiry.</p>
+        <p class="meta">User Preference: Translation Kernel (Homeric Epic into Modern English, young-adult accessible, tone-preserving).</p>
+        <p class="passage">Just as geographers, Sosius Senecio, crowd into the outermost edges of their maps the regions escaping their knowledge, appending notes that 'beyond lie sandy wastes waterless and beast-ridden,' or 'abyssal mire,' or 'Scythian cold,' or 'frozen sea,' so in the writing of the Parallel Lives, having traversed the time accessible to plausible reasoning and grounded in the history of facts, it would be fitting to say of the earlier periods: 'beyond monstrous and tragic things poets and myth-makers pasture, and there is no longer faith nor clarity.'</p>
+        <p class="passage">After publishing the account of Lycurgus the lawgiver and Numa the king, we seemed not unreasonably-our history having reached near his times-to prefix Romulus too. But to me pondering such a man (as Aeschylus says)-who will encounter him? whom shall I set against this one? who bears surety?-it appeared right to array the founder of fair and far-famed Athens opposite him, and match him to the father of invincible and glorious Rome.</p>
+        <p class="passage">May we then purify the mythical by reason, making it submit and take on history's semblance. But wherever it arrogantly disdains the plausible and refuses the mix with the probable, we shall beg clear-minded hearers who receive antiquity indulgently.</p>
       </article>
     </section>
     </section>

@@ -3,16 +3,95 @@
 - Model: `x-ai/grok-4.1-fast`
 - Translators/Debaters: `3`
 - Debate iterations: `2`
-- Finalizer weights: `faithfulness=0.20, readability=0.60, modernity=0.20`
-- Generated (UTC): `2026-02-11T21:35:49.911100+00:00`
+- User preference prompt: `Translation Kernel: Homeric Epic into Modern English (Young-Adult Accessible, Tone-Preserving)
+I. Core Aim
+Produce smooth, modern English that preserves the grandeur, austerity, and ritual force of the original Homeric Greek, with minimal interpretive expansion.
+
+1. Fidelity Over Interpretation
+    •    Do not insert motivations, emotional clarifications, or narrative explanations not present in the Greek.
+    •    Avoid embellishing with adjectives or descriptive phrasing not directly supported by the text.
+    •    Preserve ambiguity where Homer preserves ambiguity.
+    •    Maintain the compression and severity of the original lines.
+
+2. Diction: Elevated but Intelligible
+    •    Prefer strong, historically grounded translations used by classical historians where they preserve tone and meaning.
+    •    Retain culturally significant or formulaic terms (e.g., wrath, godlike, far-shooting, Achaeans).
+    •    Avoid flattening epic language into casual modern phrasing.
+    •    Choose modern vocabulary where possible, but not at the expense of tone or force.
+Example preferences:
+    •    μῆνις → “wrath” (not “anger”)
+    •    Ἄϊδι → “Hades”
+    •    Διὸς βουλή → “the plan of Zeus”
+    •    δῖος Ἀχιλλεύς → “godlike Achilles”
+    •    ἑκηβόλου Ἀπόλλωνος → “far-shooting Apollo”
+    •    κοσμήτορε λαῶν → “marshals of the people”
+
+3. Formulaic Epithets
+    •    Preserve epithets consistently.
+    •    Do not vary them for stylistic freshness.
+    •    Allow repetition to stand, as it reflects oral-formulaic composition.
+    •    Keep them compact and embedded naturally in English syntax.
+
+4. Proper Names & Archaic Terms
+    •    Use the historically accurate term (e.g., Achaeans).
+    •    At the first appearance only, include a brief parenthetical clarification if the term may be unfamiliar:
+    ◦    “Achaeans (the Greek forces)”
+    •    Do not repeat the clarification after first use.
+    •    Avoid over-explaining mythological or cultural references.
+
+5. Tone
+Preserve:
+    •    Elevation
+    •    Severity
+    •    Ritual solemnity
+    •    Impersonality
+    •    Moral weight
+Avoid:
+    •    Softening harsh speech
+    •    Modern emotional commentary
+    •    Casual phrasing
+    •    Overly archaic English (“thee,” “thou,” etc.)
+The result should feel:
+    •    Epic, but readable
+    •    Ancient, but not antiquated
+    •    Formal, but not stiff
+
+6. Violence & Force
+    •    Maintain the physical intensity of verbs.
+    •    Prefer dynamic, forceful equivalents:
+    ◦    “hurled them to Hades”
+    ◦    “cast them forth”
+    •    Do not mute the brutality inherent in the original.
+
+7. Syntax
+    •    Favor slightly smoothed English (Set B approach):
+    ◦    Natural flow
+    ◦    Modern sentence structure
+    ◦    No awkward literalism
+    •    But preserve line-by-line logical progression.
+    •    Avoid paraphrasing large conceptual units into modern narrative prose.
+
+8. Narrative Distance
+    •    Keep the narrator elevated and impersonal.
+    •    Avoid adding commentary or interpretive tone.
+    •    Let the epic speak with its own authority.
+
+9. Balance
+The governing balance:
+Smooth modern English
+    •    Homeric elevation
+    •    Formulaic fidelity
+    •    Minimal expansion
+= Epic clarity without dilution.`
+- Generated (UTC): `2026-02-12T00:04:36.675418+00:00`
 
 ## Final Translation
 
-Just as in geographies, Sosius Senecio, historians cram the outermost edges of their maps with explanations for things beyond their knowledge—such as 'beyond lie waterless and savage sands,' 'unquenchable mud,' 'Scythian cold,' or 'frozen sea'—so too, in writing the Parallel Lives, after covering the accessible stretch of time with plausible reasoning and solid, fact-based history, it would be fitting to say of the earlier matters: 'Beyond that lie monstrous and tragic things, the domain of poets and mythographers, where credibility and clarity no longer hold.'
+Just as geographers, Sosius Senecio, crowd into the outermost edges of their maps the regions escaping their knowledge, appending notes that 'beyond lie sandy wastes waterless and beast-ridden,' or 'abyssal mire,' or 'Scythian cold,' or 'frozen sea,' so in the writing of the Parallel Lives, having traversed the time accessible to plausible reasoning and grounded in the history of facts, it would be fitting to say of the earlier periods: 'beyond monstrous and tragic things poets and myth-makers pasture, and there is no longer faith nor clarity.'
 
-After publishing the discourse on Lycurgus the lawgiver and King Numa, it seemed reasonable to include Romulus as well, since our history had now reached times close to his. But as I pondered—in such a light, in the words of Aeschylus—'Who will turn up? Whom shall I set against him? Who is trustworthy?'—it appeared fitting to match the founder of beautiful and renowned Athens against the father of unconquered and greatly glorious Rome.
+After publishing the account of Lycurgus the lawgiver and Numa the king, we seemed not unreasonably—our history having reached near his times—to prefix Romulus too. But to me pondering such a man (as Aeschylus says)—who will encounter him? whom shall I set against this one? who bears surety?—it appeared right to array the founder of fair and far-famed Athens opposite him, and match him to the father of invincible and glorious Rome.
 
-It would be well for us, then, to hear the mythical purified by reason and to gain a view of history; but wherever it arrogantly scorns the plausible and refuses to blend with the probable, we shall need understanding listeners who gently welcome the antiquarian inquiry.
+May we then purify the mythical by reason, making it submit and take on history's semblance. But wherever it arrogantly disdains the plausible and refuses the mix with the probable, we shall beg clear-minded hearers who receive antiquity indulgently.
 
 ## Paragraph 1
 
@@ -22,13 +101,13 @@ It would be well for us, then, to hear the mythical purified by reason and to ga
 
 ### Final Synthesis
 
-Just as in geographies, Sosius Senecio, historians cram the outermost edges of their maps with explanations for things beyond their knowledge—such as 'beyond lie waterless and savage sands,' 'unquenchable mud,' 'Scythian cold,' or 'frozen sea'—so too, in writing the Parallel Lives, after covering the accessible stretch of time with plausible reasoning and solid, fact-based history, it would be fitting to say of the earlier matters: 'Beyond that lie monstrous and tragic things, the domain of poets and mythographers, where credibility and clarity no longer hold.'
+Just as geographers, Sosius Senecio, crowd into the outermost edges of their maps the regions escaping their knowledge, appending notes that 'beyond lie sandy wastes waterless and beast-ridden,' or 'abyssal mire,' or 'Scythian cold,' or 'frozen sea,' so in the writing of the Parallel Lives, having traversed the time accessible to plausible reasoning and grounded in the history of facts, it would be fitting to say of the earlier periods: 'beyond monstrous and tragic things poets and myth-makers pasture, and there is no longer faith nor clarity.'
 
 ### Agent Final Versions
 
-- `faithful`: Just as in geographies, O Sosius Senecio, historians cram into the outermost sections of their maps the things that escape their knowledge, appending reasons such as "beyond lie waterless and savage sands" or "unquenchable mud" or "Scythian cold" or "frozen sea," so too for me in writing the Parallel Lives—having traversed the accessible period with plausible reasoning and history substantial and holding to the facts—it would be fitting to say of the earlier matters: "beyond lie monstrous and tragic things over which poets and mythographers hold sway, and it no longer possesses credibility or clarity."
-- `readable`: Just as in geographies, Sosius Senecio, historians cram the outermost edges of their maps with explanations for things beyond their knowledge—such as 'beyond lie waterless and savage sands,' 'unquenchable mud,' 'Scythian cold,' or 'frozen sea'—so too, in writing my Parallel Lives, after covering the accessible stretch of time with plausible reasoning and solid, fact-based history, it would be fitting to say of the earlier matters: 'Beyond that, monstrous and tragic subjects are the domain of poets and mythographers, where credibility and clarity no longer hold.'
-- `modern`: Just as in geographies, Sosius Senecio, historians cram the outer edges of their maps with notes on the unknown—'parched, beast-haunted dunes,' 'unquenchable mud,' 'Scythian chill,' or 'frozen sea'—so too, writing these Parallel Lives, after mapping the accessible timeline with plausible reasoning and rock-solid history, it hit just right to say of earlier matters: 'Beyond that, poets and myth-spinners rule the monstrous and tragic—no credibility or clarity left.'
+- `faithful`: Just as geographers, O Sosius Senecio, crowd into the outermost edges of their maps the regions escaping their knowledge, appending explanations that 'beyond lie sandy wastes waterless and beast-ridden,' or 'abyssal mire,' or 'Scythian cold,' or 'frozen sea,' so for me in the writing of the Parallel Lives, having traversed the span accessible to plausible reasoning and grounded in the history of facts, it would be fitting to say of the earlier periods: 'beyond monstrous and tragic things poets and myth-makers pasture, and there is no longer faith nor clarity.'
+- `readable`: As geographers, Sosius Senecio, cram the farthest edges of their maps with regions beyond their knowledge, adding notes that 'beyond lie waterless sands and wild beasts,' or 'bottomless mire,' or 'Scythian cold,' or 'frozen sea,' so in writing the Parallel Lives—having traversed eras reachable by plausible reasoning and grounded in historical fact—it would suit me well to say of what lies beyond: 'monstrous and tragic things poets and myth-writers pasture, and no longer is there faith or clarity.'
+- `modern`: Just as geographers, Sosius Senecio, cram into the outermost edges of their maps regions that escape their knowledge, with notes saying 'beyond lie waterless sands and wild beasts,' or 'bottomless mire,' or 'Scythian cold,' or 'frozen sea,' so in writing the Parallel Lives—having traversed eras reachable by plausible reasoning and firm historical ground—it would suit me well to say of what lies beyond: 'monstrous and tragic things poets and myth-makers pasture, and no longer holds faith nor clarity.'
 
 ## Paragraph 2
 
@@ -38,13 +117,13 @@ Just as in geographies, Sosius Senecio, historians cram the outermost edges of t
 
 ### Final Synthesis
 
-After publishing the discourse on Lycurgus the lawgiver and King Numa, it seemed reasonable to include Romulus as well, since our history had now reached times close to his. But as I pondered—in such a light, in the words of Aeschylus—'Who will turn up? Whom shall I set against him? Who is trustworthy?'—it appeared fitting to match the founder of beautiful and renowned Athens against the father of unconquered and greatly glorious Rome.
+After publishing the account of Lycurgus the lawgiver and Numa the king, we seemed not unreasonably—our history having reached near his times—to prefix Romulus too. But to me pondering such a man (as Aeschylus says)—who will encounter him? whom shall I set against this one? who bears surety?—it appeared right to array the founder of fair and far-famed Athens opposite him, and match him to the father of invincible and glorious Rome.
 
 ### Agent Final Versions
 
-- `faithful`: Since, after publishing the discourse concerning Lycurgus the lawgiver and Numa the king, we thought it not unreasonable to append to Romulus as well, the history having reached times close to his, but to me pondering in such a light (according to Aeschylus)—'Who will chance? Whom shall I set in opposition to this one? Who is reliable?'—it appeared to oppose and compare the founder of beautiful and renowned Athens to the father of unconquered and greatly glorious Rome.
-- `readable`: After publishing the discourse on Lycurgus the lawgiver and King Numa, it seemed reasonable to add Romulus as well, since our history had now reached times close to his. But as I pondered—in such a light, in the words of Aeschylus—'Who will turn up? Whom shall I set against him? Who is trustworthy?'—it appeared fitting to match the founder of beautiful and illustrious Athens against the father of unconquered and greatly glorious Rome.
-- `modern`: After dropping our discourse on Lycurgus the lawgiver and King Numa, it felt totally logical to roll right into Romulus—our history was basically brushing up against his era. But as I mulled it over in that Aeschylus spotlight glow—'Who'll step up? Who do I throw against this guy? Who's rock-solid?'—the obvious play was to pit Athens' stunning, legendarily sung founder against the father of unstoppable, mega-glorious Rome.
+- `faithful`: After publishing the discourse on Lycurgus the lawgiver and Numa the king, we seemed not unreasonably—our history having reached near his times—to prefix Romulus too. But to me pondering such a man (as Aeschylus says)—who will encounter him? whom shall I set against this one? who bears surety?—it appeared right to array the founder of fair and far-famed Athens opposite him, and match him to the father of invincible and glorious Rome.
+- `readable`: After we published our account of Lycurgus the lawgiver and Numa the king, it seemed not unreasonable—our history now near Romulus's times—to include him as well. But as I pondered such a man (as Aeschylus says): who will meet him? Whom shall I set against this one? Who stands surety? It seemed best to array the founder of fair and far-famed Athens opposite him and match him to the father of unconquered and glorious Rome.
+- `modern`: After publishing our account of Lycurgus the lawgiver and Numa the king, it seemed reasonable—our history now nearing Romulus's times—to include him too. But as I pondered, to such a man (in Aeschylus's words): who will clash with him? Whom shall I set against this one? Who stands surety? It seemed best to array the founder of fair and far-famed Athens opposite the father of invincible and glorious Rome.
 
 ## Paragraph 3
 
@@ -54,10 +133,10 @@ After publishing the discourse on Lycurgus the lawgiver and King Numa, it seemed
 
 ### Final Synthesis
 
-It would be well for us, then, to hear the mythical purified by reason and to gain a view of history; but wherever it arrogantly scorns the plausible and refuses to blend with the probable, we shall need understanding listeners who gently welcome the antiquarian inquiry.
+May we then purify the mythical by reason, making it submit and take on history's semblance. But wherever it arrogantly disdains the plausible and refuses the mix with the probable, we shall beg clear-minded hearers who receive antiquity indulgently.
 
 ### Agent Final Versions
 
-- `faithful`: It would be well for us, then, to hear the mythical purified by argument and to receive a sight of history; but wherever it arrogantly scorns the plausible and refuses the admixture with the probable, we shall need understanding hearers mildly receiving the antiquarian research.
-- `readable`: It would be well for us, then, to hear the mythical element purified by reason and to gain a view of history; but wherever it arrogantly scorns the persuasive and refuses to blend with the probable, we shall need understanding listeners who gently welcome our antiquarian inquiry.
-- `modern`: We’d love hearing the mythical stuff purified by logic and catching a glimpse of history. But wherever it arrogantly scorns the plausible and refuses to blend with the probable, we’ll need understanding listeners who chill with our old-school history dig.
+- `faithful`: May it be ours, then, that the mythical, purified by reason, submit and take on history's semblance; but wherever it arrogantly disdains the plausible and refuses admixture with the probable, we shall beg clear-minded hearers who receive antiquities with indulgence.
+- `readable`: May we then purify the mythical by reason, making it submit and take on history's face. But wherever it stubbornly disdains the plausible and refuses the mix with the probable, we shall beg clear-minded hearers who receive antiquity indulgently.
+- `modern`: May we then purify fable by reason, making it submit and take on the look of history. But wherever it boldly rejects the plausible and refuses to blend with the probable, we shall beg for clear-minded listeners who receive ancient lore with indulgence.
