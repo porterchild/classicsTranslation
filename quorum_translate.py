@@ -536,6 +536,9 @@ Task:
 23) Prefer everyday verbs for the target audience over rhetorical verbs when both preserve meaning.
 24) Avoid formal scaffolding phrases that sound bookish to the target audience; prefer direct plain-English sentence openings.
 25) Avoid passage-specific wording templates; adapt phrasing to the current passage and keep instructions general.
+26) Prefer the simplest audience-appropriate synonym that preserves meaning; avoid unnecessary mid-register vocabulary.
+27) Avoid pronoun chains with unclear referents; make actor/action relationships explicit in plain English.
+28) If multiple source terms collapse to one plain-English idea for the target audience, prefer one clear phrase unless keeping both is necessary to preserve a real contrast.
 
 Return strict JSON with exactly these keys:
 {{
@@ -590,6 +593,8 @@ Reward depersonified condition/process phrasing when personified source wording 
 Penalize rhetorical verb choices that reduce target-audience clarity when simpler verbs preserve meaning.
 Penalize formal, bookish scaffolding phrases when plain openings would preserve meaning and improve audience fit.
 Penalize overfitting to passage-specific wording templates when general style guidance should drive the phrasing.
+Penalize vocabulary choices that are harder than needed for the stated audience when simpler equivalents preserve meaning.
+Penalize unclear pronoun chains and redundant near-synonym pairings that add complexity without preserving a distinct contrast.
 Flag source-like personification that sounds unnatural in English for the target audience.
 Do not reward simplifications that drop a core relation or contrast from the source.
 Penalize awkward meta-language chains that sound analytical instead of natural prose.
