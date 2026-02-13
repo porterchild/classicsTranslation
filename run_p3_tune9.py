@@ -1,5 +1,4 @@
 from pathlib import Path
-import json
 import os
 
 from openai import OpenAI
@@ -35,12 +34,10 @@ result = q.run_pipeline(
     pipeline='sequential',
 )
 
-prefix = Path(os.getenv('P3_TUNE_PREFIX', 'p3_tune_run9'))
-json_path = prefix.with_suffix('.json')
+prefix = Path(os.getenv('P3_TUNE_PREFIX', 'runs/p3_tune_run9'))
+prefix.parent.mkdir(parents=True, exist_ok=True)
 md_path = prefix.with_suffix('.md')
-json_path.write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 md_path.write_text(q.render_markdown_report(result), encoding='utf-8')
 print(result['final_translation'])
 print()
-print(f'Wrote {json_path}')
 print(f'Wrote {md_path}')

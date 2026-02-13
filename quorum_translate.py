@@ -1378,8 +1378,8 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--output-prefix",
-        default="quorum_translation",
-        help="Prefix for output files (.json and .md).",
+        default="runs/quorum_translation",
+        help="Prefix for output file (.md).",
     )
     parser.add_argument(
         "--verbose",
@@ -1435,15 +1435,13 @@ def main() -> int:
     )
 
     prefix = Path(args.output_prefix)
-    json_path = prefix.with_suffix(".json")
+    prefix.parent.mkdir(parents=True, exist_ok=True)
     md_path = prefix.with_suffix(".md")
 
-    json_path.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     md_path.write_text(render_markdown_report(result), encoding="utf-8")
 
     print(result["final_translation"])
     print()
-    print(f"Wrote {json_path}")
     print(f"Wrote {md_path}")
     return 0
 

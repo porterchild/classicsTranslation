@@ -16,7 +16,7 @@ Simple side-by-side comparison page for the opening of Plutarch's *Parallel Live
 ## Quorum Run
 
 ```bash
-.venv/bin/python quorum_translate.py --model x-ai/grok-4.1-fast --iterations 2 --verbose --preference "Prioritize short, direct sentences with minimal archaic phrasing." > quorum_run.log 2>&1
+.venv/bin/python quorum_translate.py --model x-ai/grok-4.1-fast --iterations 2 --verbose --output-prefix runs/quorum_translation --preference "Prioritize short, direct sentences with minimal archaic phrasing." > runs/quorum_run.log 2>&1
 ```
 
 ## Flow Chart
@@ -85,9 +85,8 @@ Simple side-by-side comparison page for the opening of Plutarch's *Parallel Live
                 v
       +-------------------------------------+
       | Write Files + Logs                  |
-      | - quorum_translation.json           |
-      | - quorum_translation.md             |
-      | - quorum_run.log                    |
+      | - runs/quorum_translation.md        |
+      | - runs/quorum_run.log               |
       +-------------------------------------+
                 |
                 v
