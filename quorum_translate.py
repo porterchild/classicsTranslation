@@ -543,6 +543,7 @@ Task:
 30) If a term may be above the target audience level, rewrite it into a simpler equivalent.
 31) Preserve clear domain terms when they are already understandable (for example, keep terms like myth or history); do not replace them with childish stand-ins unless clarity requires it.
 32) For younger target audiences, prefer concrete everyday phrasing over abstract modality adjectives when meaning is preserved.
+33) For uncertainty/plausibility ideas, prefer concrete real-world wording the target audience can picture.
 
 Return strict JSON with exactly these keys:
 {{
@@ -602,6 +603,7 @@ Penalize unclear pronoun chains and redundant near-synonym pairings that add com
 Penalize vocabulary that is above the stated audience reading level when a simpler wording keeps the same meaning and tone.
 Penalize replacing clear domain terms with childish stand-ins when the original concept word is understandable to the target audience.
 Penalize abstract modality adjectives when a concrete everyday phrasing would be clearer for the stated audience.
+Penalize abstract uncertainty phrasing when concrete real-world wording would better fit the target audience.
 Flag source-like personification that sounds unnatural in English for the target audience.
 Do not reward simplifications that drop a core relation or contrast from the source.
 Penalize awkward meta-language chains that sound analytical instead of natural prose.
@@ -673,6 +675,7 @@ Task:
 7) Match word difficulty to the stated audience and prefer high-frequency everyday words when meaning is preserved.
 8) Preserve clear domain terms instead of replacing them with childish stand-ins when those terms are understandable to the target audience.
 9) For younger target audiences, avoid abstract modality adjectives when a concrete everyday phrasing can carry the same meaning.
+10) For uncertainty/plausibility ideas, prefer concrete real-world wording the target audience can picture.
 
 Return strict JSON with exactly these keys:
 {{
