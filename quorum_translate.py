@@ -528,7 +528,9 @@ Task:
 9) Keep the tone clear and dignified: avoid cutesy wording, slang, and bookish scaffolding.
 10) If faithfulness and readability conflict, keep core meaning/relations and favor natural readability for the stated audience.
 11) If carried-over personification sounds stiff, restate the same intent directly in natural prose.
-12) Final self-check: if it still sounds source-shaped, rewrite once more in plain natural English.
+12) Use reference translations for meaning checks only; do not imitate their diction or syntax.
+13) Keep final wording closer to your plain-language restatement than to your source-close sketch, unless meaning would be lost.
+14) Final self-check: if it still sounds source-shaped, rewrite once more in plain natural English.
 
 Return strict JSON with exactly these keys:
 {{
@@ -580,7 +582,8 @@ Also judge with these priorities:
 5) Do not penalize wording merges when they keep the same meaning and improve natural flow.
 6) Do not reward simplification that drops any core relation or contrast from the source.
 7) Reward direct intent-level phrasing when figurative carryover sounds stiff but meaning is preserved.
-8) Give concrete rewrite proposals, not generic feedback.
+8) Treat reference translations as semantic checks only, not style targets.
+9) Give concrete rewrite proposals, not generic feedback.
 
 Return strict JSON with exactly these keys:
 {{
@@ -646,7 +649,9 @@ Task:
 4) If faithfulness and readability conflict, preserve core meaning/relations and favor natural readability for the stated audience.
 5) Prefer clear concrete wording over source-shaped abstraction; avoid cutesy/slangy/bookish phrasing.
 6) Prefer direct intent-level phrasing when figurative carryover sounds stiff and does not improve clarity.
-7) Treat candidate scores as hints only and judge the candidate text directly.
+7) Treat reference translations as semantic checks only; do not mirror their style.
+8) Prefer outputs whose final phrasing stays closer to plain restatement style than source-close sketch style.
+9) Treat candidate scores as hints only and judge the candidate text directly.
 
 Return strict JSON with exactly these keys:
 {{
