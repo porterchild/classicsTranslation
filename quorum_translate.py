@@ -745,6 +745,7 @@ Task:
 11) You may substantially rephrase clause structure when needed for natural readability, as long as meaning is preserved.
 12) If two nearby clauses express nearly the same idea, collapse them into one clear plain clause.
 13) Keep clear domain terms from the selected draft when they are already understandable; avoid cute substitute nouns.
+14) Prefer one simple plausibility statement over paired near-synonym checks when both say nearly the same thing.
 
 Return strict JSON with exactly these keys:
 {{
