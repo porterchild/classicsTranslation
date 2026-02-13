@@ -513,43 +513,21 @@ User preference prompt:
 Iteration: {iteration}
 {previous_translation_block}{previous_judgment_block}
 Task:
-1) Write observations first as an exploration pass, including alternative wording/structure options.
-2) In observations, explore options broadly and spend time testing different ways to say each hard part.
-3) In observations, begin with a concise true plain-language restatement that sounds like natural conversation for the target audience.
-4) The plain restatement must avoid source-shaped syntax and abstract calque wording.
-5) After the plain restatement, add a source-close sketch and interpolate between them before choosing final phrasing.
-6) Produce an improved modern English translation for this paragraph.
-7) Use prior judgment context (if provided) to fix weaknesses.
-8) Balance these goals:
+1) Start with observations as pre-translation exploration.
+2) In observations, include:
+   a) a concise plain-language restatement in natural conversation for the target audience,
+   b) a brief source-close sketch,
+   c) a few candidate phrasings, including at least one that breaks source syntax.
+3) Then produce an improved modern English translation for this paragraph (single paragraph).
+4) Use prior judgment context (if provided) to fix weaknesses.
+5) Prioritize the user preference prompt, then balance these goals:
 {GOALS_GUIDANCE}
-9) Keep one paragraph and preserve core meaning and imagery.
-10) Translate by meaning, not by source-language syntax; re-cast structure where needed so the result sounds natural to a modern reader.
-11) Before finalizing, deliberately explore multiple plausible phrasings and choose the one that is clearest and most natural while preserving meaning.
-12) Keep the tone clear and dignified: simple modern English without cutesy wording, slang, or cartoonish substitutions.
-13) Keep key concepts intact; do not replace them with loose kid-style stand-ins.
-14) Prefer idiomatic English over one-to-one calques: if a literal abstract pairing sounds clunky, combine or recast it into one smoother plain-English idea that preserves meaning.
-15) It is acceptable to merge near-synonymous abstract source terms into one clear audience-appropriate phrase when that improves natural flow without changing core meaning.
-16) Keep source personification only when it sounds natural in English; otherwise restate the meaning in plain language.
-17) For younger target audiences, default to depersonified process wording unless personification clearly improves clarity and naturalness.
-18) Avoid stacked abstractions; prefer one concrete, natural phrase when conveying abstract ideas.
-19) Simplify by rephrasing, not by deleting meaning: keep all core relations from the source even when wording becomes shorter and easier.
-20) Prefer concrete event-style wording over meta-language chains; rewrite abstract phrasing into natural clauses the target audience can follow in one pass.
-21) If a source-shaped sentence still sounds stiff after interpolation, rewrite it again with a new English structure and only keep the core meaning.
-22) You may change grammatical subject, voice, and clause order when needed for natural English, as long as the same events/relations remain.
-23) Readability for the stated audience takes priority over lexical mirroring when both cannot be maximized at once.
-24) In observations, explicitly test at least one bolder paraphrase that breaks source syntax, then keep whichever option reads most naturally while preserving meaning.
-25) If personification sounds forced in English, convert it into plain condition/process wording while preserving meaning.
-26) Prefer everyday verbs for the target audience over rhetorical verbs when both preserve meaning.
-27) Avoid formal scaffolding phrases that sound bookish to the target audience; prefer direct plain-English sentence openings.
-28) Avoid passage-specific wording templates; adapt phrasing to the current passage and keep instructions general.
-29) Prefer the simplest audience-appropriate synonym that preserves meaning; avoid unnecessary mid-register vocabulary.
-30) Avoid pronoun chains with unclear referents; make actor/action relationships explicit in plain English.
-31) If multiple source terms collapse to one plain-English idea for the target audience, prefer one clear phrase unless keeping both is necessary to preserve a real contrast.
-32) Match vocabulary difficulty to the target audience; prefer common high-frequency words when they preserve meaning.
-33) If a term may be above the target audience level, rewrite it into a simpler equivalent.
-34) Preserve clear domain terms when they are already understandable; do not replace them with childish stand-ins unless clarity requires it.
-35) For younger target audiences, prefer concrete everyday phrasing over abstract language when meaning is preserved.
-36) Before finalizing, self-check the plain restatement: if it still reads like a translation of the source, rewrite it in more conversational everyday English.
+6) Preserve core meaning, key contrasts, and imagery; do not add new meaning.
+7) Translate by meaning, not source syntax: change subject, voice, and clause order when needed for natural English.
+8) Prefer clear, concrete, audience-appropriate wording and avoid calque-like abstraction.
+9) Keep the tone clear and dignified: avoid cutesy wording, slang, and bookish scaffolding.
+10) If faithfulness and readability conflict, keep core meaning/relations and favor natural readability for the stated audience.
+11) Final self-check: if it still sounds source-shaped, rewrite once more in plain natural English.
 
 Return strict JSON with exactly these keys:
 {{
@@ -593,26 +571,14 @@ Translation to judge:
 
 Judge this translation on:
 {GOALS_GUIDANCE}
-Also judge whether the English sounds naturally written for modern readers rather than mirroring Greek structure.
-Treat the user preference prompt as a primary objective when scoring and planning revisions.
-If lexical/source-shape closeness conflicts with natural readability for the requested audience, prefer the readable option as long as core meaning and relations are preserved.
-Call out phrases that feel clunky or source-shaped and propose concrete, meaning-preserving rewrites.
-Flag any wording that becomes cutesy, babyish, slangy, or overly loose versus the source concepts.
-Penalize literal calques, awkward personification, and abstract pairings that read like translationese rather than natural English.
-Do not penalize merged wording when it faithfully preserves meaning and clearly improves natural readability for the target audience.
-Reward depersonified condition/process phrasing when personified source wording would sound stiff in natural English.
-Penalize rhetorical verb choices that reduce target-audience clarity when simpler verbs preserve meaning.
-Penalize formal, bookish scaffolding phrases when plain openings would preserve meaning and improve audience fit.
-Penalize overfitting to passage-specific wording templates when general style guidance should drive the phrasing.
-Penalize vocabulary choices that are harder than needed for the stated audience when simpler equivalents preserve meaning.
-Penalize unclear pronoun chains and redundant near-synonym pairings that add complexity without preserving a distinct contrast.
-Penalize vocabulary that is above the stated audience reading level when a simpler wording keeps the same meaning and tone.
-Penalize replacing clear domain terms with childish stand-ins when the original concept word is understandable to the target audience.
-Penalize abstract wording when concrete everyday phrasing would be clearer for the stated audience.
-For younger audiences, penalize optional personification when a depersonified process phrasing is clearer and equally faithful.
-Flag source-like personification that sounds unnatural in English for the target audience.
-Do not reward simplifications that drop a core relation or contrast from the source.
-Penalize awkward meta-language chains that sound analytical instead of natural prose.
+Also judge with these priorities:
+1) Prioritize the user preference prompt when scoring and planning revisions.
+2) Check whether the English sounds naturally written for modern readers instead of mirroring Greek structure.
+3) Penalize literal calques, awkward abstraction stacks, forced personification, unclear pronouns, and vocabulary above the target audience level.
+4) Penalize cutesy/slangy/bookish phrasing when a plain dignified option would preserve meaning.
+5) Do not penalize wording merges when they keep the same meaning and improve natural flow.
+6) Do not reward simplification that drops any core relation or contrast from the source.
+7) Give concrete rewrite proposals, not generic feedback.
 
 Return strict JSON with exactly these keys:
 {{
@@ -673,15 +639,11 @@ Candidate iterations:
 
 Task:
 1) Select the strongest candidate iteration for the user preference while preserving core source meaning.
-2) You may rewrite the selected candidate as needed for a stronger final result, but keep the final output as a single paragraph and avoid introducing new meaning.
-3) Prioritize natural readability for the requested audience over lexical mirroring when both cannot be maximized.
-4) Avoid formal scaffolding or rhetorical phrasing if a plainer equivalent preserves meaning.
-5) Keep all core relations/contrasts from the source.
-6) Treat candidate scores as hints only; evaluate candidate text quality directly.
-7) Match word difficulty to the stated audience and prefer high-frequency everyday words when meaning is preserved.
-8) Preserve clear domain terms instead of replacing them with childish stand-ins when those terms are understandable to the target audience.
-9) For younger target audiences, prefer concrete everyday phrasing over abstract language when meaning is preserved.
-10) For younger target audiences, prefer depersonified process wording unless personification clearly improves clarity.
+2) You may rewrite the selected candidate for a stronger final result, but keep one paragraph and do not add new meaning.
+3) Prioritize user preference first, then balance faithfulness, readability, and modernity.
+4) If faithfulness and readability conflict, preserve core meaning/relations and favor natural readability for the stated audience.
+5) Prefer clear concrete wording over source-shaped abstraction; avoid cutesy/slangy/bookish phrasing.
+6) Treat candidate scores as hints only and judge the candidate text directly.
 
 Return strict JSON with exactly these keys:
 {{
