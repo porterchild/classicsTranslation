@@ -530,25 +530,26 @@ Task:
 14) Prefer idiomatic English over one-to-one calques: if a literal abstract pairing sounds clunky, combine or recast it into one smoother plain-English idea that preserves meaning.
 15) It is acceptable to merge near-synonymous abstract source terms into one clear audience-appropriate phrase when that improves natural flow without changing core meaning.
 16) Keep source personification only when it sounds natural in English; otherwise restate the meaning in plain language.
-17) Avoid stacked abstractions; prefer one concrete, natural phrase when conveying abstract ideas.
-18) Simplify by rephrasing, not by deleting meaning: keep all core relations from the source even when wording becomes shorter and easier.
-19) Prefer concrete event-style wording over meta-language chains; rewrite abstract phrasing into natural clauses the target audience can follow in one pass.
-20) If a source-shaped sentence still sounds stiff after interpolation, rewrite it again with a new English structure and only keep the core meaning.
-21) You may change grammatical subject, voice, and clause order when needed for natural English, as long as the same events/relations remain.
-22) Readability for the stated audience takes priority over lexical mirroring when both cannot be maximized at once.
-23) In observations, explicitly test at least one bolder paraphrase that breaks source syntax, then keep whichever option reads most naturally while preserving meaning.
-24) If personification sounds forced in English, convert it into plain condition/process wording while preserving meaning.
-25) Prefer everyday verbs for the target audience over rhetorical verbs when both preserve meaning.
-26) Avoid formal scaffolding phrases that sound bookish to the target audience; prefer direct plain-English sentence openings.
-27) Avoid passage-specific wording templates; adapt phrasing to the current passage and keep instructions general.
-28) Prefer the simplest audience-appropriate synonym that preserves meaning; avoid unnecessary mid-register vocabulary.
-29) Avoid pronoun chains with unclear referents; make actor/action relationships explicit in plain English.
-30) If multiple source terms collapse to one plain-English idea for the target audience, prefer one clear phrase unless keeping both is necessary to preserve a real contrast.
-31) Match vocabulary difficulty to the target audience; prefer common high-frequency words when they preserve meaning.
-32) If a term may be above the target audience level, rewrite it into a simpler equivalent.
-33) Preserve clear domain terms when they are already understandable (for example, keep terms like myth or history); do not replace them with childish stand-ins unless clarity requires it.
-34) For younger target audiences, prefer concrete everyday phrasing over abstract language when meaning is preserved.
-35) Before finalizing, self-check the plain restatement: if it still reads like a translation of the source, rewrite it in more conversational everyday English.
+17) For younger target audiences, default to depersonified process wording unless personification clearly improves clarity and naturalness.
+18) Avoid stacked abstractions; prefer one concrete, natural phrase when conveying abstract ideas.
+19) Simplify by rephrasing, not by deleting meaning: keep all core relations from the source even when wording becomes shorter and easier.
+20) Prefer concrete event-style wording over meta-language chains; rewrite abstract phrasing into natural clauses the target audience can follow in one pass.
+21) If a source-shaped sentence still sounds stiff after interpolation, rewrite it again with a new English structure and only keep the core meaning.
+22) You may change grammatical subject, voice, and clause order when needed for natural English, as long as the same events/relations remain.
+23) Readability for the stated audience takes priority over lexical mirroring when both cannot be maximized at once.
+24) In observations, explicitly test at least one bolder paraphrase that breaks source syntax, then keep whichever option reads most naturally while preserving meaning.
+25) If personification sounds forced in English, convert it into plain condition/process wording while preserving meaning.
+26) Prefer everyday verbs for the target audience over rhetorical verbs when both preserve meaning.
+27) Avoid formal scaffolding phrases that sound bookish to the target audience; prefer direct plain-English sentence openings.
+28) Avoid passage-specific wording templates; adapt phrasing to the current passage and keep instructions general.
+29) Prefer the simplest audience-appropriate synonym that preserves meaning; avoid unnecessary mid-register vocabulary.
+30) Avoid pronoun chains with unclear referents; make actor/action relationships explicit in plain English.
+31) If multiple source terms collapse to one plain-English idea for the target audience, prefer one clear phrase unless keeping both is necessary to preserve a real contrast.
+32) Match vocabulary difficulty to the target audience; prefer common high-frequency words when they preserve meaning.
+33) If a term may be above the target audience level, rewrite it into a simpler equivalent.
+34) Preserve clear domain terms when they are already understandable (for example, keep terms like myth or history); do not replace them with childish stand-ins unless clarity requires it.
+35) For younger target audiences, prefer concrete everyday phrasing over abstract language when meaning is preserved.
+36) Before finalizing, self-check the plain restatement: if it still reads like a translation of the source, rewrite it in more conversational everyday English.
 
 Return strict JSON with exactly these keys:
 {{
@@ -608,6 +609,7 @@ Penalize unclear pronoun chains and redundant near-synonym pairings that add com
 Penalize vocabulary that is above the stated audience reading level when a simpler wording keeps the same meaning and tone.
 Penalize replacing clear domain terms with childish stand-ins when the original concept word is understandable to the target audience.
 Penalize abstract wording when concrete everyday phrasing would be clearer for the stated audience.
+For younger audiences, penalize optional personification when a depersonified process phrasing is clearer and equally faithful.
 Flag source-like personification that sounds unnatural in English for the target audience.
 Do not reward simplifications that drop a core relation or contrast from the source.
 Penalize awkward meta-language chains that sound analytical instead of natural prose.
@@ -679,6 +681,7 @@ Task:
 7) Match word difficulty to the stated audience and prefer high-frequency everyday words when meaning is preserved.
 8) Preserve clear domain terms instead of replacing them with childish stand-ins when those terms are understandable to the target audience.
 9) For younger target audiences, prefer concrete everyday phrasing over abstract language when meaning is preserved.
+10) For younger target audiences, prefer depersonified process wording unless personification clearly improves clarity.
 
 Return strict JSON with exactly these keys:
 {{
