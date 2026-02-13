@@ -70,8 +70,8 @@
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(6, minmax(250px, 1fr));
-      min-width: 1530px;
+      grid-template-columns: repeat(9, minmax(250px, 1fr));
+      min-width: 2300px;
       gap: 0.8rem;
     }
 
@@ -123,8 +123,8 @@
 
     @media (max-width: 1200px) {
       .grid {
-        grid-template-columns: repeat(6, minmax(220px, 1fr));
-        min-width: 1360px;
+        grid-template-columns: repeat(9, minmax(220px, 1fr));
+        min-width: 2020px;
       }
     }
 
@@ -134,8 +134,8 @@
       }
 
       .grid {
-        grid-template-columns: repeat(6, minmax(200px, 1fr));
-        min-width: 1240px;
+        grid-template-columns: repeat(9, minmax(200px, 1fr));
+        min-width: 1840px;
       }
     }
   </style>
@@ -144,7 +144,7 @@
   <main class="page">
     <section class="headline">
       <h1>Plutarch, <em>Parallel Lives</em> (Theseus 1.1-1.3)</h1>
-      <p class="subtitle">Opening passage comparison with six columns: Greek text, literal English (word-level), Dryden/Clough (1859), Stewart/Long (1894), AI Quorum-Modern English (Preference: 10-year-old readability), and AI Quorum-Modern English (Preference: translation_instructions.txt).</p>
+      <p class="subtitle">Opening passage comparison with nine columns: Greek text, literal English (word-level), Dryden/Clough (1859), Stewart/Long (1894), AI Quorum-Modern English (Preference: 7-year-old readability), AI Sequential-Modern English (Preference: 7-year-old readability), AI Sequential-Modern English (Preference: 7th-grade readability, noodling update), AI Quorum-Modern English (Preference: 10-year-old readability), and AI Quorum-Modern English (Preference: Translation Kernel: Homeric Epic into Modern English...).</p>
       <p class="subtitle">Greek source: <a href="https://el.wikisource.org/wiki/%CE%92%CE%AF%CE%BF%CE%B9_%CE%A0%CE%B1%CF%81%CE%AC%CE%BB%CE%BB%CE%B7%CE%BB%CE%BF%CE%B9/%CE%98%CE%B7%CF%83%CE%B5%CF%8D%CF%82" target="_blank" rel="noopener noreferrer">Wikisource (Greek)</a></p>
     </section>
 
@@ -183,6 +183,33 @@
         <p class="passage">Yet, now that I have published the lives of Lykurgus the lawgiver and Numa the king, as I have brought my narrative down in chronology to Romulus, I thought I might well compare with him who made glorious and famous Athens, the father of unconquerable and glorious Rome.</p>
         <p class="passage">May I be able to purge away the mythical matter, and make it submit to reason and look like history; but where it will not yield to probable argument, and cannot be made to agree with what is possible, I shall ask for indulgent readers, and such as can receive with favour the tales of antiquity.</p>
         <p class="meta">Source: <a href="https://www.gutenberg.org/ebooks/14033" target="_blank" rel="noopener noreferrer">gutenberg.org</a></p>
+      </article>
+
+      <article class="card">
+        <h2>AI Quorum-Modern English (Preference: 7-Year-Old Readability)</h2>
+        <p class="meta">3-agent quorum, 2 debate iterations, model: x-ai/grok-4.1-fast</p>
+        <p class="meta">User Preference: this should be readable by a 7 year old.</p>
+        <p class="passage">Map makers, friend Sosius Senecio, push unknown lands to map edges. They add notes. 'Past here: dry sand deserts full of wild animals.' Or 'endless sticky mud.' Or 'super cold ice.' Or 'frozen sea.' Same for my paired hero stories. I covered times we reach with smart thinking and real history facts. For older times: 'Past that: monster stuff and sad tales. Poets and story makers live there. No truth. No clear facts.'</p>
+        <p class="passage">We wrote about Lycurgus the rule-maker and King Numa. Our story got close to Romulus's time. It made sense to add him. But for such a big hero-like Aeschylus said-who fights him? Who can match him? Who is tough enough? We chose the starter of pretty, famous Athens to compare with the dad of unbeatable, super-great Rome.</p>
+        <p class="passage">May the fairy tale parts, cleaned by reason, obey and look like history. But wherever they say no to what's believable and won't mix with what's likely, we'll beg kind listeners who gently accept old stories.</p>
+      </article>
+
+      <article class="card">
+        <h2>AI Sequential-Modern English (Preference: 7-Year-Old Readability)</h2>
+        <p class="meta">Sequential pipeline, 1 agent, 3 iterations, model: x-ai/grok-4.1-fast</p>
+        <p class="meta">User Preference: this should be readable by a 7 year old.</p>
+        <p class="passage">Just like map makers, Sosius Senecio, squeeze unknown places onto the edges of their maps and scribble notes like 'beyond this: sandy deserts without water full of wild beasts,' or 'endless mud,' or 'Scythian cold,' or 'frozen sea.' So too, in my book of paired lives, after covering the time reachable by reasonable guesses and solid facts from history, it's right to say of the earlier ages: 'Beyond that: monsters and tragic tales claimed by poets and fable-makers-no truth or clarity anymore.'</p>
+        <p class="passage">After we published our book about Lycurgus the law-maker and King Numa, it seemed fair to add Romulus too, since our story had reached near his time. But as I wondered, quoting Aeschylus: Who will stand up to this guy? Who can I match him with? Who is trusty enough? It felt right to compare the founder of beautiful and famous Athens with the father of unbeatable and glorious Rome.</p>
+        <p class="passage">So then, may the myths be cleaned by reason, obey it, and look like history. But where they stubbornly ignore what's believable and refuse to mix with what's likely, we'll beg kind listeners who gently welcome ancient stories.</p>
+      </article>
+
+      <article class="card">
+        <h2>AI Sequential-Modern English (Preference: 7th-Grade Readability, Noodling Update)</h2>
+        <p class="meta">Sequential pipeline, 1 agent, 3 iterations, model: x-ai/grok-4.1-fast</p>
+        <p class="meta">User Preference: This should be readable by a 7th grader.</p>
+        <p class="passage">Just like geographers, Sosius Senecio, cram the unknown parts of the world onto the edges of their maps. They add notes saying 'waterless deserts full of wild beasts,' or 'bottomless mud,' or 'Scythian cold,' or 'frozen sea.' In the same way, in writing my Parallel Lives, after covering the eras reachable by logical reasoning and solid facts from history, it fits to say about the earlier times: 'Beyond that, monsters and tragic tales-poets and myth-writers claim it all. No more trust or clarity there.'</p>
+        <p class="passage">After we published the account of Lycurgus the lawgiver and Numa the king, we thought it wouldn't be unreasonable to cover Romulus next, now that our history had reached a time close to his. But as I thought about this great warrior (as Aeschylus says), "Who will fight him? Who should I set against him? Who's reliable?" it seemed best to match the founder of beautiful and famous Athens against the father of unbeatable and glorious Rome.</p>
+        <p class="passage">So, may I succeed in purifying fable with reason, making it submit and take on history's look. But wherever it stubbornly rejects what's believable and refuses to blend with probability, I'll beg for kind listeners who gently welcome ancient tales.</p>
       </article>
 
       <article class="card">

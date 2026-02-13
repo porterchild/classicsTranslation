@@ -17,6 +17,8 @@ from openai import OpenAI
 
 DEFAULT_MODEL = "x-ai/grok-4.1-fast"
 DEFAULT_ITERATIONS = 2
+DEFAULT_SEQUENTIAL_ITERATIONS = 3
+DEFAULT_PIPELINE = "debate"
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 DEFAULT_USER_PREFERENCE = "No additional user preference provided."
 GOALS_GUIDANCE = (
@@ -327,7 +329,7 @@ Also assess how well each translation follows the user preference prompt.
 
 Return strict JSON with exactly these keys:
 {{
-  "round_summary": "3-6 sentences summarizing best arguments",
+  "round_summary": "summary of strongest arguments",
   "critiques": [
     {{
       "agent": "faithful|readable|modern",
@@ -340,7 +342,7 @@ Return strict JSON with exactly these keys:
       }}
     }}
   ],
-  "self_revision_plan": "2-4 concrete edits you will make next"
+  "self_revision_plan": "concrete edits you will make next"
 }}
 """.strip()
     return system, user
@@ -392,7 +394,7 @@ Also satisfy the user preference prompt while balancing those goals.
 Return strict JSON with exactly these keys:
 {{
   "translation": "...",
-  "change_summary": "2-4 sentences on what changed and why",
+  "change_summary": "what changed and why",
   "self_scores": {{
     "faithfulness": 1-10,
     "readability": 1-10,
@@ -448,7 +450,7 @@ Task:
 Return strict JSON with exactly these keys:
 {{
   "final_translation": "...",
-  "justification": "3-6 sentences explaining balance choices",
+  "justification": "explanation of balance choices",
   "balance_scores": {{
     "faithfulness": 1-10,
     "readability": 1-10,
@@ -459,7 +461,109 @@ Return strict JSON with exactly these keys:
     return system, user
 
 
-def run_quorum(
+def sequential_translate_prompt(
+    greek: str,
+    paragraph_index: int,
+    reference_translations: dict[str, str],
+    user_preference: str,
+    iteration: int,
+    previous_translation: str | None,
+    previous_judgment: dict[str, Any] | None,
+) -> tuple[str, str]:
+    system = (
+        "You are a single translation agent iterating on one Ancient Greek paragraph. "
+        "Output JSON only."
+    )
+    refs = reference_context_block(reference_translations)
+    previous_translation_block = ""
+    if previous_translation:
+        previous_translation_block = (
+            f"\nPrevious iteration translation:\n{previous_translation}\n"
+        )
+    previous_judgment_block = ""
+    if previous_judgment:
+        previous_judgment_block = (
+            "\nPrevious iteration self-judgment JSON:\n"
+            f"{json.dumps(previous_judgment, ensure_ascii=False, indent=2)}\n"
+        )
+    user = f"""
+Paragraph {paragraph_index} Greek:
+{greek}
+
+{refs}
+
+User preference prompt:
+{user_preference}
+
+Iteration: {iteration}
+{previous_translation_block}{previous_judgment_block}
+Task:
+1) Produce an improved modern English translation for this paragraph.
+2) Use prior judgment context (if provided) to fix weaknesses.
+3) Balance these goals:
+{GOALS_GUIDANCE}
+4) Keep one paragraph and preserve core meaning and imagery.
+
+Return strict JSON with exactly these keys:
+{{
+  "observations": "brief planning notes for this iteration",
+  "translation": "...",
+  "self_scores": {{
+    "faithfulness": 1-10,
+    "readability": 1-10,
+    "modernity": 1-10
+  }}
+}}
+""".strip()
+    return system, user
+
+
+def sequential_judge_prompt(
+    greek: str,
+    paragraph_index: int,
+    translation: str,
+    reference_translations: dict[str, str],
+    user_preference: str,
+    iteration: int,
+) -> tuple[str, str]:
+    system = (
+        "You are a strict self-critic for a translation iteration. "
+        "Judge against instructions and provide actionable revision feedback. Output JSON only."
+    )
+    refs = reference_context_block(reference_translations)
+    user = f"""
+Paragraph {paragraph_index} Greek:
+{greek}
+
+{refs}
+
+User preference prompt:
+{user_preference}
+
+Iteration: {iteration}
+Translation to judge:
+{translation}
+
+Judge this translation on:
+{GOALS_GUIDANCE}
+
+Return strict JSON with exactly these keys:
+{{
+  "overall_judgment": "candid quality assessment",
+  "strengths": "concrete strengths",
+  "issues": "concrete issues",
+  "revision_plan": "concrete edits for next iteration",
+  "scores": {{
+    "faithfulness": 1-10,
+    "readability": 1-10,
+    "modernity": 1-10
+  }}
+}}
+""".strip()
+    return system, user
+
+
+def run_debate_pipeline(
     client: OpenAI,
     model: str,
     greek_paragraphs: list[str],
@@ -720,6 +824,7 @@ def run_quorum(
 
     return {
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
+        "pipeline": "debate",
         "model": model,
         "iterations": iterations,
         "agent_count": len(AGENTS),
@@ -731,13 +836,241 @@ def run_quorum(
     }
 
 
+def run_sequential_pipeline(
+    client: OpenAI,
+    model: str,
+    greek_paragraphs: list[str],
+    iterations: int,
+    verbose: bool,
+    color_mode: str,
+    user_preference: str,
+) -> dict[str, Any]:
+    paragraphs: list[dict[str, Any]] = []
+    color_enabled = should_use_color(color_mode)
+    normalized_preference = normalize_user_preference(user_preference)
+
+    def vprint(
+        message: str,
+        agent_key: str | None = None,
+        stage: str | None = None,
+    ) -> None:
+        if not verbose:
+            return
+        color: str | None = None
+        if agent_key:
+            color = AGENT_COLORS.get(agent_key)
+        elif stage:
+            color = STAGE_COLORS.get(stage)
+        print(colorize(message, color, color_enabled), file=sys.stderr)
+
+    def score_line(scores: Any) -> str:
+        if not isinstance(scores, dict):
+            return "n/a"
+        f = scores.get("faithfulness", "n/a")
+        r = scores.get("readability", "n/a")
+        m = scores.get("modernity", "n/a")
+        return f"faithfulness={f}, readability={r}, modernity={m}"
+
+    for idx, greek in enumerate(greek_paragraphs, start=1):
+        vprint(f"[paragraph {idx}] sequential iteration pipeline...", stage="iteration")
+        vprint(
+            f"[paragraph {idx}] user preference prompt: {normalized_preference}",
+            stage="reference",
+        )
+
+        reference_translations = {
+            "dryden_clough": (
+                DEFAULT_DRYDEN_CLOUGH_PARAGRAPHS[idx - 1]
+                if idx - 1 < len(DEFAULT_DRYDEN_CLOUGH_PARAGRAPHS)
+                else ""
+            ),
+            "perrin": (
+                DEFAULT_PERRIN_PARAGRAPHS[idx - 1] if idx - 1 < len(DEFAULT_PERRIN_PARAGRAPHS) else ""
+            ),
+        }
+
+        vprint(
+            f"[paragraph {idx}] reference input [dryden_clough]: "
+            f"{reference_translations['dryden_clough']}",
+            stage="reference",
+        )
+        vprint(
+            f"[paragraph {idx}] reference input [perrin]: "
+            f"{reference_translations['perrin']}",
+            stage="reference",
+        )
+
+        current_translation = ""
+        current_judgment: dict[str, Any] | None = None
+        iteration_logs: list[dict[str, Any]] = []
+
+        for it in range(1, iterations + 1):
+            vprint(f"[paragraph {idx}] [iter {it}] translate...", stage="iteration")
+            system, user = sequential_translate_prompt(
+                greek=greek,
+                paragraph_index=idx,
+                reference_translations=reference_translations,
+                user_preference=normalized_preference,
+                iteration=it,
+                previous_translation=current_translation or None,
+                previous_judgment=current_judgment,
+            )
+            translation_result = call_json(client, model, system, user, temperature=0.45)
+            current_translation = str(translation_result.get("translation", "")).strip()
+            observations = str(translation_result.get("observations", "")).strip()
+
+            vprint(
+                f"[paragraph {idx}] [iter {it}] [sequential] observations: {observations}",
+                agent_key="modern",
+            )
+            vprint(f"[paragraph {idx}] [iter {it}] [sequential] translation:", agent_key="modern")
+            vprint(current_translation, agent_key="modern")
+            vprint(
+                f"[paragraph {idx}] [iter {it}] [sequential] translation self-scores: "
+                f"{score_line(translation_result.get('self_scores'))}",
+                agent_key="modern",
+            )
+
+            vprint(f"[paragraph {idx}] [iter {it}] self-judge...", stage="iteration")
+            system, user = sequential_judge_prompt(
+                greek=greek,
+                paragraph_index=idx,
+                translation=current_translation,
+                reference_translations=reference_translations,
+                user_preference=normalized_preference,
+                iteration=it,
+            )
+            current_judgment = call_json(client, model, system, user, temperature=0.3)
+            vprint(
+                f"[paragraph {idx}] [iter {it}] [sequential] judgment: "
+                f"{current_judgment.get('overall_judgment', '')}",
+                agent_key="faithful",
+            )
+            vprint(
+                f"[paragraph {idx}] [iter {it}] [sequential] strengths: "
+                f"{current_judgment.get('strengths', '')}",
+                agent_key="faithful",
+            )
+            vprint(
+                f"[paragraph {idx}] [iter {it}] [sequential] issues: "
+                f"{current_judgment.get('issues', '')}",
+                agent_key="faithful",
+            )
+            vprint(
+                f"[paragraph {idx}] [iter {it}] [sequential] revision plan: "
+                f"{current_judgment.get('revision_plan', '')}",
+                agent_key="faithful",
+            )
+            vprint(
+                f"[paragraph {idx}] [iter {it}] [sequential] judgment scores: "
+                f"{score_line(current_judgment.get('scores'))}",
+                agent_key="faithful",
+            )
+
+            iteration_logs.append(
+                {
+                    "iteration": it,
+                    "translation_step": translation_result,
+                    "judgment_step": current_judgment,
+                    "translation": current_translation,
+                }
+            )
+
+        final_translation = current_translation
+        final_judgment = current_judgment or {}
+        vprint(f"[paragraph {idx}] final sequential translation:", stage="final")
+        vprint(final_translation, stage="final")
+        vprint(
+            f"[paragraph {idx}] final sequential judgment: "
+            f"{final_judgment.get('overall_judgment', '')}",
+            stage="final",
+        )
+        vprint(
+            f"[paragraph {idx}] final sequential scores: "
+            f"{score_line(final_judgment.get('scores'))}",
+            stage="final",
+        )
+
+        paragraphs.append(
+            {
+                "paragraph_index": idx,
+                "greek": greek,
+                "reference_translations": reference_translations,
+                "sequential_iterations": iteration_logs,
+                "final_agent_versions": {"sequential": final_translation},
+                "final_synthesis": {
+                    "final_translation": final_translation,
+                    "justification": str(final_judgment.get("overall_judgment", "")).strip(),
+                    "balance_scores": final_judgment.get("scores", {}),
+                },
+            }
+        )
+
+    full_translation = "\n\n".join(
+        p["final_synthesis"].get("final_translation", "").strip() for p in paragraphs
+    ).strip()
+
+    return {
+        "created_at_utc": datetime.now(timezone.utc).isoformat(),
+        "pipeline": "sequential",
+        "model": model,
+        "iterations": iterations,
+        "agent_count": 1,
+        "user_preference": normalized_preference,
+        "agents": [
+            {
+                "key": "sequential",
+                "name": "Sequential Translator",
+                "priority": "balanced",
+            }
+        ],
+        "paragraph_count": len(greek_paragraphs),
+        "paragraphs": paragraphs,
+        "final_translation": full_translation,
+    }
+
+
+def run_pipeline(
+    client: OpenAI,
+    model: str,
+    greek_paragraphs: list[str],
+    iterations: int,
+    verbose: bool,
+    color_mode: str,
+    user_preference: str,
+    pipeline: str,
+) -> dict[str, Any]:
+    if pipeline == "debate":
+        return run_debate_pipeline(
+            client=client,
+            model=model,
+            greek_paragraphs=greek_paragraphs,
+            iterations=iterations,
+            verbose=verbose,
+            color_mode=color_mode,
+            user_preference=user_preference,
+        )
+    if pipeline == "sequential":
+        return run_sequential_pipeline(
+            client=client,
+            model=model,
+            greek_paragraphs=greek_paragraphs,
+            iterations=iterations,
+            verbose=verbose,
+            color_mode=color_mode,
+            user_preference=user_preference,
+        )
+    raise ValueError(f"Unsupported pipeline: {pipeline}")
+
+
 def render_markdown_report(result: dict[str, Any]) -> str:
     lines: list[str] = []
     lines.append("# Quorum Translation Report")
     lines.append("")
+    lines.append(f"- Pipeline: `{result.get('pipeline', 'debate')}`")
     lines.append(f"- Model: `{result['model']}`")
     lines.append(f"- Translators/Debaters: `{result['agent_count']}`")
-    lines.append(f"- Debate iterations: `{result['iterations']}`")
+    lines.append(f"- Iterations: `{result['iterations']}`")
     lines.append(f"- User preference prompt: `{result['user_preference']}`")
     lines.append(f"- Generated (UTC): `{result['created_at_utc']}`")
     lines.append("")
@@ -770,11 +1103,24 @@ def render_markdown_report(result: dict[str, Any]) -> str:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
-            "Run a multi-agent quorum translation workflow (translate -> debate -> revise -> synthesize)."
+            "Run a modular Greek translation workflow with swappable pipelines."
         )
     )
+    parser.add_argument(
+        "--pipeline",
+        choices=["debate", "sequential"],
+        default=DEFAULT_PIPELINE,
+        help="Translation pipeline to run.",
+    )
     parser.add_argument("--model", default=DEFAULT_MODEL)
-    parser.add_argument("--iterations", type=int, default=DEFAULT_ITERATIONS)
+    parser.add_argument(
+        "--iterations",
+        type=int,
+        default=None,
+        help=(
+            "Iteration count. Defaults: debate=2, sequential=3."
+        ),
+    )
     parser.add_argument(
         "--output-prefix",
         default="quorum_translation",
@@ -801,7 +1147,13 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
-    if args.iterations < 1:
+    iterations = args.iterations
+    if iterations is None:
+        if args.pipeline == "sequential":
+            iterations = DEFAULT_SEQUENTIAL_ITERATIONS
+        else:
+            iterations = DEFAULT_ITERATIONS
+    if iterations < 1:
         print("--iterations must be >= 1", file=sys.stderr)
         return 2
 
@@ -816,14 +1168,15 @@ def main() -> int:
         base_url=OPENROUTER_BASE_URL,
     )
 
-    result = run_quorum(
+    result = run_pipeline(
         client=client,
         model=args.model,
         greek_paragraphs=DEFAULT_GREEK_PARAGRAPHS,
-        iterations=args.iterations,
+        iterations=iterations,
         verbose=args.verbose,
         color_mode=args.color,
         user_preference=args.preference,
+        pipeline=args.pipeline,
     )
 
     prefix = Path(args.output_prefix)

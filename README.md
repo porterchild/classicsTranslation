@@ -95,3 +95,7 @@ Simple side-by-side comparison page for the opening of Plutarch's *Parallel Live
       | Update quorum column in index.html  |
       +-------------------------------------+
 ```
+
+
+## Future Ideas
+-one of the 'standards' to judge the fidelity of a translation against is whether the main observations/arguments/commentary from classic (and classical) commentary works can be reproduced from the new translation.
