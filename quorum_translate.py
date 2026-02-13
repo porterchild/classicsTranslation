@@ -523,11 +523,11 @@ Task:
 10) Keep the tone clear and dignified: simple modern English without cutesy wording, slang, or cartoonish substitutions.
 11) Keep key concepts intact; do not replace them with loose kid-style stand-ins.
 12) Prefer idiomatic English over one-to-one calques: if a literal abstract pairing sounds clunky, combine or recast it into one smoother plain-English idea that preserves meaning.
-13) It is acceptable to merge near-synonymous abstract source terms into one clear child-friendly phrase when that improves natural flow without changing core meaning.
+13) It is acceptable to merge near-synonymous abstract source terms into one clear audience-appropriate phrase when that improves natural flow without changing core meaning.
 14) Keep source personification only when it sounds natural in English; otherwise restate the meaning in plain language.
-15) Avoid stacked abstractions; prefer one concrete, natural phrase when conveying credibility/probability ideas.
+15) Avoid stacked abstractions; prefer one concrete, natural phrase when conveying abstract modality/uncertainty ideas.
 16) Simplify by rephrasing, not by deleting meaning: keep all core relations from the source even when wording becomes shorter and easier.
-17) Prefer concrete event-style wording over meta-language chains; rewrite abstract phrasing into natural clauses a child can follow in one pass.
+17) Prefer concrete event-style wording over meta-language chains; rewrite abstract phrasing into natural clauses the target audience can follow in one pass.
 18) If a source-shaped sentence still sounds stiff after interpolation, rewrite it again with a new English structure and only keep the core meaning.
 19) You may change grammatical subject, voice, and clause order when needed for natural English, as long as the same events/relations remain.
 20) Readability for the stated audience takes priority over lexical mirroring when both cannot be maximized at once.
