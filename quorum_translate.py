@@ -529,6 +529,7 @@ Task:
 10) If figurative carryover sounds stiff, restate the same intent directly in natural prose.
 11) Final wording should stay closer to your plain-language restatement than to your source-close sketch unless meaning would be lost.
 12) Final self-check: if the result still sounds source-shaped, rewrite once more in plain natural English.
+13) Do not copy phrasing from reference translations; paraphrase in fresh plain-English wording.
 
 Return strict JSON with exactly these keys:
 {{
@@ -584,6 +585,7 @@ Also judge with these priorities:
 9) Penalize mechanism-heavy translationese phrasing with abstract-noun chains when a direct outcome phrasing would preserve meaning.
 10) Give concrete rewrite proposals, not generic feedback.
 11) Penalize constructions that explain abstract relations indirectly when a direct plain-language outcome would be clearer.
+12) Penalize lexical/style borrowing from reference translations when fresh plain wording would preserve meaning.
 
 Return strict JSON with exactly these keys:
 {{
@@ -704,6 +706,7 @@ Task:
 9) Prefer reader-facing outcome phrasing over mechanism chains with abstract nouns.
 10) If any phrase sounds translated, rewrite it into natural modern English while preserving meaning.
 11) If a clause describes an abstract relation indirectly, rewrite it as a direct plain-language outcome.
+12) Do not reuse reference-translation phrasing; keep wording fresh and plain while preserving meaning.
 
 Return strict JSON with exactly these keys:
 {{
