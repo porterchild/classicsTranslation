@@ -581,7 +581,8 @@ Also judge with these priorities:
 6) Do not reward simplification that drops any core relation or contrast from the source.
 7) Reward direct intent-level phrasing when figurative carryover sounds stiff.
 8) Treat reference translations as semantic checks only, not style targets.
-9) Give concrete rewrite proposals, not generic feedback.
+9) Penalize mechanism-heavy translationese phrasing with abstract-noun chains when a direct outcome phrasing would preserve meaning.
+10) Give concrete rewrite proposals, not generic feedback.
 
 Return strict JSON with exactly these keys:
 {{
@@ -699,7 +700,8 @@ Task:
 6) Keep phrasing closer to plain natural English than source-shaped diction.
 7) Assume written prose unless the user preference says spoken delivery; if an audience noun is needed, prefer readers over listeners.
 8) Prefer direct plain verbs over metaphor-mechanics wording when meaning is unchanged.
-9) If any phrase sounds translated, rewrite it into natural modern English while preserving meaning.
+9) Prefer reader-facing outcome phrasing over mechanism chains with abstract nouns.
+10) If any phrase sounds translated, rewrite it into natural modern English while preserving meaning.
 
 Return strict JSON with exactly these keys:
 {{
