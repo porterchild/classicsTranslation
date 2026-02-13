@@ -681,12 +681,9 @@ def sequential_polish_prompt(
         "You are a final plain-English polisher for a translation pipeline. "
         "Rewrite once for natural readability while preserving meaning. Output JSON only."
     )
-    refs = reference_context_block(reference_translations)
     user = f"""
 Paragraph {paragraph_index} Greek:
 {greek}
-
-{refs}
 
 User preference prompt:
 {user_preference}
@@ -699,14 +696,12 @@ Task:
 2) Keep one paragraph and preserve the same core meaning, relations, and contrasts.
 3) Do not add new meaning or remove core meaning.
 4) Prioritize natural readability for the target audience and keep tone clear and dignified.
-5) Treat reference translations as semantic checks only, not style targets.
-6) Keep phrasing closer to plain natural English than source-shaped diction.
-7) Assume written prose unless the user preference says spoken delivery; if an audience noun is needed, prefer readers over listeners.
-8) Prefer direct plain verbs over metaphor-mechanics wording when meaning is unchanged.
-9) Prefer reader-facing outcome phrasing over mechanism chains with abstract nouns.
-10) If any phrase sounds translated, rewrite it into natural modern English while preserving meaning.
-11) If a clause describes an abstract relation indirectly, rewrite it as a direct plain-language outcome.
-12) Do not reuse reference-translation phrasing; keep wording fresh and plain while preserving meaning.
+5) Keep phrasing closer to plain natural English than source-shaped diction.
+6) Assume written prose unless the user preference says spoken delivery; if an audience noun is needed, prefer readers over listeners.
+7) Prefer direct plain verbs over metaphor-mechanics wording when meaning is unchanged.
+8) Prefer reader-facing outcome phrasing over mechanism chains with abstract nouns.
+9) If any phrase sounds translated, rewrite it into natural modern English while preserving meaning.
+10) If a clause describes an abstract relation indirectly, rewrite it as a direct plain-language outcome.
 
 Return strict JSON with exactly these keys:
 {{
