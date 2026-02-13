@@ -12,9 +12,12 @@ if not api_key:
 
 client = OpenAI(api_key=api_key, base_url=q.OPENROUTER_BASE_URL)
 
-preference = (
-    'This should be readable by a 7 year old. '
-    'Use smooth plain clauses, and express plausibility in natural terms like whether something sounds believable or could really happen.'
+preference = os.getenv(
+    'P3_TUNE_PREFERENCE',
+    (
+        'This should be readable by a 7 year old. '
+        'Use smooth plain clauses, and express abstract ideas in everyday language that fits the passage.'
+    ),
 )
 
 # Keep reference alignment with the selected Greek paragraph.

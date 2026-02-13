@@ -532,9 +532,10 @@ Task:
 19) You may change grammatical subject, voice, and clause order when needed for natural English, as long as the same events/relations remain.
 20) Readability for the stated audience takes priority over lexical mirroring when both cannot be maximized at once.
 21) In observations, explicitly test at least one bolder paraphrase that breaks source syntax, then keep whichever option reads most naturally while preserving meaning.
-22) If personification sounds forced in English, convert it into plain condition/process wording (for example, "when the story won't sound believable") while preserving meaning.
+22) If personification sounds forced in English, convert it into plain condition/process wording while preserving meaning.
 23) Prefer everyday verbs for the target audience over rhetorical verbs when both preserve meaning.
 24) Avoid formal scaffolding phrases that sound bookish to the target audience; prefer direct plain-English sentence openings.
+25) Avoid passage-specific wording templates; adapt phrasing to the current passage and keep instructions general.
 
 Return strict JSON with exactly these keys:
 {{
@@ -588,6 +589,7 @@ Do not penalize merged wording when it faithfully preserves meaning and clearly 
 Reward depersonified condition/process phrasing when personified source wording would sound stiff in natural English.
 Penalize rhetorical verb choices that reduce target-audience clarity when simpler verbs preserve meaning.
 Penalize formal, bookish scaffolding phrases when plain openings would preserve meaning and improve audience fit.
+Penalize overfitting to passage-specific wording templates when general style guidance should drive the phrasing.
 Flag source-like personification that sounds unnatural in English for the target audience.
 Do not reward simplifications that drop a core relation or contrast from the source.
 Penalize awkward meta-language chains that sound analytical instead of natural prose.
