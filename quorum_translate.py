@@ -697,6 +697,9 @@ Task:
 4) Prioritize natural readability for the target audience and keep tone clear and dignified.
 5) Treat reference translations as semantic checks only, not style targets.
 6) Keep phrasing closer to plain natural English than source-shaped diction.
+7) Assume written prose unless the user preference says spoken delivery; if an audience noun is needed, prefer readers over listeners.
+8) Prefer direct plain verbs over metaphor-mechanics wording when meaning is unchanged.
+9) If any phrase sounds translated, rewrite it into natural modern English while preserving meaning.
 
 Return strict JSON with exactly these keys:
 {{
