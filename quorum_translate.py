@@ -225,6 +225,7 @@ def call_json(
                     {"role": "user", "content": user_prompt},
                 ],
                 temperature=temperature,
+                timeout=120,
             )
             content = resp.choices[0].message.content or ""
             return parse_json_object(content)
@@ -272,12 +273,17 @@ User preference prompt:
 Task:
 1) Before translating, write your observations as initial exploration/ideation.
    Focus on how you plan to handle difficult phrases, tone, and tradeoffs.
-2) Then translate this paragraph into modern English, using those observations.
-3) Keep all 3 goals in view:
+2) In those observations, compare multiple plausible wording/structure options before choosing one.
+3) In observations, first restate the paragraph in simple plain language, then interpolate between that plain restatement and a source-close rendering to choose the final phrasing.
+4) Then translate this paragraph into modern English, using those observations.
+5) Keep all 3 goals in view:
 {GOALS_GUIDANCE}
-4) Consider the user preference prompt while balancing the 3 goals above.
-5) Your personal priority is: {agent.priority}.
-6) Keep to one paragraph.
+6) Consider the user preference prompt while balancing the 3 goals above.
+7) Your personal priority is: {agent.priority}.
+8) Translate by meaning, not by Greek word order; recast syntax when needed so the English reads naturally.
+9) Before finalizing, explore multiple plausible phrasings and choose the clearest natural wording that still preserves meaning.
+10) Keep to one paragraph.
+11) Keep the tone clear and dignified: simple modern English without cutesy wording, slang, or cartoonish substitutions.
 
 Return strict JSON with exactly these keys:
 {{
@@ -390,6 +396,9 @@ Your personal priority: {agent.priority}
 Revise using these goal definitions:
 {GOALS_GUIDANCE}
 Also satisfy the user preference prompt while balancing those goals.
+Translate by meaning, not by Greek word order; recast syntax when needed so the English reads naturally.
+Before finalizing, explore multiple plausible phrasings and choose the clearest natural wording that still preserves meaning.
+Keep the tone clear and dignified: simple modern English without cutesy wording, slang, or cartoonish substitutions.
 
 Return strict JSON with exactly these keys:
 {{
@@ -446,6 +455,9 @@ Task:
 - Prioritize the user preference prompt above when tradeoffs conflict.
 - Then balance the three goals while preserving core meaning, argument flow, and key imagery.
 - Resolve disagreements using the debate summaries.
+- Translate by meaning, not by Greek word order; recast syntax when needed so the English reads naturally.
+- Before finalizing, explore multiple plausible phrasings and choose the clearest natural wording that still preserves meaning.
+- Keep the tone clear and dignified: simple modern English without cutesy wording, slang, or cartoonish substitutions.
 
 Return strict JSON with exactly these keys:
 {{
@@ -498,11 +510,31 @@ User preference prompt:
 Iteration: {iteration}
 {previous_translation_block}{previous_judgment_block}
 Task:
-1) Produce an improved modern English translation for this paragraph.
-2) Use prior judgment context (if provided) to fix weaknesses.
-3) Balance these goals:
+1) Write observations first as an exploration pass, including alternative wording/structure options.
+2) In observations, explore options broadly and spend time testing different ways to say each hard part.
+3) In observations, first restate what the paragraph is saying in very simple plain language, then interpolate between that restatement and a source-close rendering before choosing final phrasing.
+4) Produce an improved modern English translation for this paragraph.
+5) Use prior judgment context (if provided) to fix weaknesses.
+6) Balance these goals:
 {GOALS_GUIDANCE}
-4) Keep one paragraph and preserve core meaning and imagery.
+7) Keep one paragraph and preserve core meaning and imagery.
+8) Translate by meaning, not by source-language syntax; re-cast structure where needed so the result sounds natural to a modern reader.
+9) Before finalizing, deliberately explore multiple plausible phrasings and choose the one that is clearest and most natural while preserving meaning.
+10) Keep the tone clear and dignified: simple modern English without cutesy wording, slang, or cartoonish substitutions.
+11) Keep key concepts intact; do not replace them with loose kid-style stand-ins.
+12) Prefer idiomatic English over one-to-one calques: if a literal abstract pairing sounds clunky, combine or recast it into one smoother plain-English idea that preserves meaning.
+13) It is acceptable to merge near-synonymous abstract source terms into one clear child-friendly phrase when that improves natural flow without changing core meaning.
+14) Keep source personification only when it sounds natural in English; otherwise restate the meaning in plain language.
+15) Avoid stacked abstractions; prefer one concrete, natural phrase when conveying credibility/probability ideas.
+16) Simplify by rephrasing, not by deleting meaning: keep all core relations from the source even when wording becomes shorter and easier.
+17) Prefer concrete event-style wording over meta-language chains; rewrite abstract phrasing into natural clauses a child can follow in one pass.
+18) If a source-shaped sentence still sounds stiff after interpolation, rewrite it again with a new English structure and only keep the core meaning.
+19) You may change grammatical subject, voice, and clause order when needed for natural English, as long as the same events/relations remain.
+20) Readability for the stated audience takes priority over lexical mirroring when both cannot be maximized at once.
+21) In observations, explicitly test at least one bolder paraphrase that breaks source syntax, then keep whichever option reads most naturally while preserving meaning.
+22) If personification sounds forced in English, convert it into plain condition/process wording (for example, "when the story won't sound believable") while preserving meaning.
+23) Prefer everyday verbs for the target audience over rhetorical verbs when both preserve meaning.
+24) Avoid formal scaffolding phrases that sound bookish to the target audience; prefer direct plain-English sentence openings.
 
 Return strict JSON with exactly these keys:
 {{
@@ -546,6 +578,19 @@ Translation to judge:
 
 Judge this translation on:
 {GOALS_GUIDANCE}
+Also judge whether the English sounds naturally written for modern readers rather than mirroring Greek structure.
+Treat the user preference prompt as a primary objective when scoring and planning revisions.
+If lexical/source-shape closeness conflicts with natural readability for the requested audience, prefer the readable option as long as core meaning and relations are preserved.
+Call out phrases that feel clunky or source-shaped and propose concrete, meaning-preserving rewrites.
+Flag any wording that becomes cutesy, babyish, slangy, or overly loose versus the source concepts.
+Penalize literal calques, awkward personification, and abstract pairings that read like translationese rather than natural English.
+Do not penalize merged wording when it faithfully preserves meaning and clearly improves natural readability for the target audience.
+Reward depersonified condition/process phrasing when personified source wording would sound stiff in natural English.
+Penalize rhetorical verb choices that reduce target-audience clarity when simpler verbs preserve meaning.
+Penalize formal, bookish scaffolding phrases when plain openings would preserve meaning and improve audience fit.
+Flag source-like personification that sounds unnatural in English for the target audience.
+Do not reward simplifications that drop a core relation or contrast from the source.
+Penalize awkward meta-language chains that sound analytical instead of natural prose.
 
 Return strict JSON with exactly these keys:
 {{
@@ -554,6 +599,69 @@ Return strict JSON with exactly these keys:
   "issues": "concrete issues",
   "revision_plan": "concrete edits for next iteration",
   "scores": {{
+    "faithfulness": 1-10,
+    "readability": 1-10,
+    "modernity": 1-10
+  }}
+}}
+""".strip()
+    return system, user
+
+
+def sequential_selection_prompt(
+    greek: str,
+    paragraph_index: int,
+    reference_translations: dict[str, str],
+    user_preference: str,
+    iteration_logs: list[dict[str, Any]],
+) -> tuple[str, str]:
+    system = (
+        "You are the final selector for a sequential translation loop. "
+        "Choose and lightly refine the best iteration result for the stated audience and preference. "
+        "Output JSON only."
+    )
+    refs = reference_context_block(reference_translations)
+    compact_iters: list[dict[str, Any]] = []
+    for item in iteration_logs:
+        translation_step = item.get("translation_step", {})
+        judgment_step = item.get("judgment_step", {})
+        compact_iters.append(
+            {
+                "iteration": item.get("iteration"),
+                "translation": item.get("translation", ""),
+                "self_scores": translation_step.get("self_scores", {}),
+                "judge_scores": judgment_step.get("scores", {}),
+                "judge_summary": judgment_step.get("overall_judgment", ""),
+                "judge_issues": judgment_step.get("issues", ""),
+                "judge_plan": judgment_step.get("revision_plan", ""),
+            }
+        )
+    payload = json.dumps(compact_iters, ensure_ascii=False, indent=2)
+    user = f"""
+Paragraph {paragraph_index} Greek:
+{greek}
+
+{refs}
+
+User preference prompt:
+{user_preference}
+
+Candidate iterations:
+{payload}
+
+Task:
+1) Select the strongest candidate iteration for the user preference while preserving core source meaning.
+2) You may lightly refine wording, but keep the final output as a single paragraph and avoid introducing new meaning.
+3) Prioritize natural readability for the requested audience over lexical mirroring when both cannot be maximized.
+4) Avoid formal scaffolding or rhetorical phrasing if a plainer equivalent preserves meaning.
+5) Keep all core relations/contrasts from the source.
+
+Return strict JSON with exactly these keys:
+{{
+  "selected_iteration": 1,
+  "final_translation": "...",
+  "justification": "why this is best for the stated preference",
+  "balance_scores": {{
     "faithfulness": 1-10,
     "readability": 1-10,
     "modernity": 1-10
@@ -976,10 +1084,39 @@ def run_sequential_pipeline(
                 }
             )
 
-        final_translation = current_translation
         final_judgment = current_judgment or {}
+        final_translation = current_translation
+        selected_iteration = iterations
+        system, user = sequential_selection_prompt(
+            greek=greek,
+            paragraph_index=idx,
+            reference_translations=reference_translations,
+            user_preference=normalized_preference,
+            iteration_logs=iteration_logs,
+        )
+        selection_result = call_json(client, model, system, user, temperature=0.25)
+        selected_value = selection_result.get("selected_iteration", iterations)
+        try:
+            selected_iteration = int(selected_value)
+        except (TypeError, ValueError):
+            selected_iteration = iterations
+        if not (1 <= selected_iteration <= len(iteration_logs)):
+            selected_iteration = iterations
+        selected_text = str(selection_result.get("final_translation", "")).strip()
+        if selected_text:
+            final_translation = selected_text
+        selected_scores = selection_result.get("balance_scores")
+        if isinstance(selected_scores, dict):
+            final_judgment = {
+                "overall_judgment": str(selection_result.get("justification", "")).strip(),
+                "scores": selected_scores,
+            }
         vprint(f"[paragraph {idx}] final sequential translation:", stage="final")
         vprint(final_translation, stage="final")
+        vprint(
+            f"[paragraph {idx}] selected iteration: {selected_iteration}",
+            stage="final",
+        )
         vprint(
             f"[paragraph {idx}] final sequential judgment: "
             f"{final_judgment.get('overall_judgment', '')}",
@@ -1002,6 +1139,7 @@ def run_sequential_pipeline(
                     "final_translation": final_translation,
                     "justification": str(final_judgment.get("overall_judgment", "")).strip(),
                     "balance_scores": final_judgment.get("scores", {}),
+                    "selected_iteration": selected_iteration,
                 },
             }
         )
