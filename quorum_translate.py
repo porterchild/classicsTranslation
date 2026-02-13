@@ -539,6 +539,8 @@ Task:
 26) Prefer the simplest audience-appropriate synonym that preserves meaning; avoid unnecessary mid-register vocabulary.
 27) Avoid pronoun chains with unclear referents; make actor/action relationships explicit in plain English.
 28) If multiple source terms collapse to one plain-English idea for the target audience, prefer one clear phrase unless keeping both is necessary to preserve a real contrast.
+29) Match vocabulary difficulty to the target audience; prefer common high-frequency words when they preserve meaning.
+30) If a term may be above the target audience level, rewrite it into a simpler equivalent.
 
 Return strict JSON with exactly these keys:
 {{
@@ -595,6 +597,7 @@ Penalize formal, bookish scaffolding phrases when plain openings would preserve 
 Penalize overfitting to passage-specific wording templates when general style guidance should drive the phrasing.
 Penalize vocabulary choices that are harder than needed for the stated audience when simpler equivalents preserve meaning.
 Penalize unclear pronoun chains and redundant near-synonym pairings that add complexity without preserving a distinct contrast.
+Penalize vocabulary that is above the stated audience reading level when a simpler wording keeps the same meaning and tone.
 Flag source-like personification that sounds unnatural in English for the target audience.
 Do not reward simplifications that drop a core relation or contrast from the source.
 Penalize awkward meta-language chains that sound analytical instead of natural prose.
@@ -658,10 +661,12 @@ Candidate iterations:
 
 Task:
 1) Select the strongest candidate iteration for the user preference while preserving core source meaning.
-2) You may lightly refine wording, but keep the final output as a single paragraph and avoid introducing new meaning.
+2) You may rewrite the selected candidate as needed for a stronger final result, but keep the final output as a single paragraph and avoid introducing new meaning.
 3) Prioritize natural readability for the requested audience over lexical mirroring when both cannot be maximized.
 4) Avoid formal scaffolding or rhetorical phrasing if a plainer equivalent preserves meaning.
 5) Keep all core relations/contrasts from the source.
+6) Treat candidate scores as hints only; evaluate candidate text quality directly.
+7) Match word difficulty to the stated audience and prefer high-frequency everyday words when meaning is preserved.
 
 Return strict JSON with exactly these keys:
 {{
