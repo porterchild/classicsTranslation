@@ -746,6 +746,7 @@ Task:
 12) If two nearby clauses express nearly the same idea, collapse them into one clear plain clause.
 13) Keep clear domain terms from the selected draft when they are already understandable; avoid cute substitute nouns.
 14) Prefer one simple plausibility statement over paired near-synonym checks when both say nearly the same thing.
+15) Preserve the selected draft's wish/modality stance; do not shift it into a stronger personal assertion.
 
 Return strict JSON with exactly these keys:
 {{
