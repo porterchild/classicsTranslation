@@ -476,6 +476,46 @@ Return strict JSON with exactly these keys:
     return system, user
 
 
+def distilled_judgment_guidance(previous_judgment: dict[str, Any]) -> str:
+    scores = previous_judgment.get("scores", {})
+    faith = scores.get("faithfulness") if isinstance(scores, dict) else None
+    read = scores.get("readability") if isinstance(scores, dict) else None
+    modern = scores.get("modernity") if isinstance(scores, dict) else None
+    corpus = " ".join(
+        [
+            str(previous_judgment.get("overall_judgment", "")),
+            str(previous_judgment.get("issues", "")),
+            str(previous_judgment.get("revision_plan", "")),
+        ]
+    ).lower()
+
+    lines: list[str] = []
+    if isinstance(faith, (int, float)) and faith < 9:
+        lines.append("- Keep all core meaning, relations, and contrasts from the Greek.")
+    if isinstance(read, (int, float)) and read < 9:
+        lines.append("- Use shorter, smoother plain clauses for easier reading.")
+    if isinstance(modern, (int, float)) and modern < 9:
+        lines.append("- Avoid archaic or bookish wording; keep modern plain prose.")
+
+    if "source-shaped" in corpus or "calque" in corpus or "literal" in corpus:
+        lines.append("- Rewrite source-shaped wording into natural English structure.")
+    if "cutesy" in corpus or "slang" in corpus or "bookish" in corpus:
+        lines.append("- Keep tone clear and dignified; avoid cutesy/slangy/bookish phrasing.")
+    if "personif" in corpus:
+        lines.append("- Avoid forced personification when plain process wording is clearer.")
+    if "pronoun" in corpus:
+        lines.append("- Avoid unclear pronoun chains; keep actor/action references explicit.")
+    if "abstract" in corpus or "likely" in corpus or "probable" in corpus or "believable" in corpus:
+        lines.append("- Prefer direct plain-language outcomes over abstract relation chains.")
+
+    if not lines:
+        lines = [
+            "- Keep wording natural, plain, and audience-appropriate.",
+            "- Preserve meaning and key contrasts while avoiding source-shaped phrasing.",
+        ]
+    return "\n".join(dict.fromkeys(lines))
+
+
 def sequential_translate_prompt(
     greek: str,
     paragraph_index: int,
@@ -497,9 +537,10 @@ def sequential_translate_prompt(
         )
     previous_judgment_block = ""
     if previous_judgment:
+        distilled = distilled_judgment_guidance(previous_judgment)
         previous_judgment_block = (
-            "\nPrevious iteration self-judgment JSON:\n"
-            f"{json.dumps(previous_judgment, ensure_ascii=False, indent=2)}\n"
+            "\nCarry-forward guidance from previous judgment:\n"
+            f"{distilled}\n"
         )
     user = f"""
 Paragraph {paragraph_index} Greek:
