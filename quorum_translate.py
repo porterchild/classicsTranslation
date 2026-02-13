@@ -742,6 +742,7 @@ Task:
 8) Prefer reader-facing outcome phrasing over mechanism chains with abstract nouns.
 9) If any phrase sounds translated, rewrite it into natural modern English while preserving meaning.
 10) If a clause describes an abstract relation indirectly, rewrite it as a direct plain-language outcome.
+11) You may substantially rephrase clause structure when needed for natural readability, as long as meaning is preserved.
 
 Return strict JSON with exactly these keys:
 {{
@@ -1204,7 +1205,7 @@ def run_sequential_pipeline(
             user_preference=normalized_preference,
             selected_translation=final_translation,
         )
-        polish_result = call_json(client, model, system, user, temperature=0.2)
+        polish_result = call_json(client, model, system, user, temperature=0.55)
         polished_text = str(polish_result.get("polished_translation", "")).strip()
         if polished_text:
             final_translation = polished_text
