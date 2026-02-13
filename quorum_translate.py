@@ -274,7 +274,7 @@ Task:
 1) Before translating, write your observations as initial exploration/ideation.
    Focus on how you plan to handle difficult phrases, tone, and tradeoffs.
 2) In those observations, compare multiple plausible wording/structure options before choosing one.
-3) In observations, start with a true plain-language restatement (1-2 short sentences) as if explaining the meaning in everyday conversation.
+3) In observations, start with a concise true plain-language restatement as if explaining the meaning in everyday conversation.
    This restatement must not mirror source syntax or source-shaped abstractions.
 4) Then add a source-close sketch and interpolate between the two to choose final phrasing.
 5) Then translate this paragraph into modern English, using those observations.
@@ -515,7 +515,7 @@ Iteration: {iteration}
 Task:
 1) Write observations first as an exploration pass, including alternative wording/structure options.
 2) In observations, explore options broadly and spend time testing different ways to say each hard part.
-3) In observations, begin with a true plain-language restatement (1-2 short sentences) that sounds like natural conversation for the target audience.
+3) In observations, begin with a concise true plain-language restatement that sounds like natural conversation for the target audience.
 4) The plain restatement must avoid source-shaped syntax and abstract calque wording.
 5) After the plain restatement, add a source-close sketch and interpolate between them before choosing final phrasing.
 6) Produce an improved modern English translation for this paragraph.
@@ -530,7 +530,7 @@ Task:
 14) Prefer idiomatic English over one-to-one calques: if a literal abstract pairing sounds clunky, combine or recast it into one smoother plain-English idea that preserves meaning.
 15) It is acceptable to merge near-synonymous abstract source terms into one clear audience-appropriate phrase when that improves natural flow without changing core meaning.
 16) Keep source personification only when it sounds natural in English; otherwise restate the meaning in plain language.
-17) Avoid stacked abstractions; prefer one concrete, natural phrase when conveying abstract modality/uncertainty ideas.
+17) Avoid stacked abstractions; prefer one concrete, natural phrase when conveying abstract ideas.
 18) Simplify by rephrasing, not by deleting meaning: keep all core relations from the source even when wording becomes shorter and easier.
 19) Prefer concrete event-style wording over meta-language chains; rewrite abstract phrasing into natural clauses the target audience can follow in one pass.
 20) If a source-shaped sentence still sounds stiff after interpolation, rewrite it again with a new English structure and only keep the core meaning.
@@ -547,10 +547,8 @@ Task:
 31) Match vocabulary difficulty to the target audience; prefer common high-frequency words when they preserve meaning.
 32) If a term may be above the target audience level, rewrite it into a simpler equivalent.
 33) Preserve clear domain terms when they are already understandable (for example, keep terms like myth or history); do not replace them with childish stand-ins unless clarity requires it.
-34) For younger target audiences, prefer concrete everyday phrasing over abstract modality adjectives when meaning is preserved.
-35) For uncertainty/plausibility ideas, prefer concrete real-world wording the target audience can picture.
-36) For younger audiences, avoid low-frequency abstract modality adjectives unless they are strictly necessary for meaning.
-37) Before finalizing, self-check the plain restatement: if it still reads like a translation of the source, rewrite it in more conversational everyday English.
+34) For younger target audiences, prefer concrete everyday phrasing over abstract language when meaning is preserved.
+35) Before finalizing, self-check the plain restatement: if it still reads like a translation of the source, rewrite it in more conversational everyday English.
 
 Return strict JSON with exactly these keys:
 {{
@@ -609,9 +607,7 @@ Penalize vocabulary choices that are harder than needed for the stated audience 
 Penalize unclear pronoun chains and redundant near-synonym pairings that add complexity without preserving a distinct contrast.
 Penalize vocabulary that is above the stated audience reading level when a simpler wording keeps the same meaning and tone.
 Penalize replacing clear domain terms with childish stand-ins when the original concept word is understandable to the target audience.
-Penalize abstract modality adjectives when a concrete everyday phrasing would be clearer for the stated audience.
-Penalize abstract uncertainty phrasing when concrete real-world wording would better fit the target audience.
-Penalize low-frequency abstract modality adjectives for younger audiences when simpler wording preserves meaning.
+Penalize abstract wording when concrete everyday phrasing would be clearer for the stated audience.
 Flag source-like personification that sounds unnatural in English for the target audience.
 Do not reward simplifications that drop a core relation or contrast from the source.
 Penalize awkward meta-language chains that sound analytical instead of natural prose.
@@ -682,9 +678,7 @@ Task:
 6) Treat candidate scores as hints only; evaluate candidate text quality directly.
 7) Match word difficulty to the stated audience and prefer high-frequency everyday words when meaning is preserved.
 8) Preserve clear domain terms instead of replacing them with childish stand-ins when those terms are understandable to the target audience.
-9) For younger target audiences, avoid abstract modality adjectives when a concrete everyday phrasing can carry the same meaning.
-10) For uncertainty/plausibility ideas, prefer concrete real-world wording the target audience can picture.
-11) For younger audiences, avoid low-frequency abstract modality adjectives unless strictly required for meaning.
+9) For younger target audiences, prefer concrete everyday phrasing over abstract language when meaning is preserved.
 
 Return strict JSON with exactly these keys:
 {{
