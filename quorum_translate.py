@@ -274,16 +274,19 @@ Task:
 1) Before translating, write your observations as initial exploration/ideation.
    Focus on how you plan to handle difficult phrases, tone, and tradeoffs.
 2) In those observations, compare multiple plausible wording/structure options before choosing one.
-3) In observations, first restate the paragraph in simple plain language, then interpolate between that plain restatement and a source-close rendering to choose the final phrasing.
-4) Then translate this paragraph into modern English, using those observations.
-5) Keep all 3 goals in view:
+3) In observations, start with a true plain-language restatement (1-2 short sentences) as if explaining the meaning in everyday conversation.
+   This restatement must not mirror source syntax or source-shaped abstractions.
+4) Then add a source-close sketch and interpolate between the two to choose final phrasing.
+5) Then translate this paragraph into modern English, using those observations.
+6) Keep all 3 goals in view:
 {GOALS_GUIDANCE}
-6) Consider the user preference prompt while balancing the 3 goals above.
-7) Your personal priority is: {agent.priority}.
-8) Translate by meaning, not by Greek word order; recast syntax when needed so the English reads naturally.
-9) Before finalizing, explore multiple plausible phrasings and choose the clearest natural wording that still preserves meaning.
-10) Keep to one paragraph.
-11) Keep the tone clear and dignified: simple modern English without cutesy wording, slang, or cartoonish substitutions.
+7) Consider the user preference prompt while balancing the 3 goals above.
+8) Your personal priority is: {agent.priority}.
+9) Translate by meaning, not by Greek word order; recast syntax when needed so the English reads naturally.
+10) Before finalizing, explore multiple plausible phrasings and choose the clearest natural wording that still preserves meaning.
+11) Keep to one paragraph.
+12) Keep the tone clear and dignified: simple modern English without cutesy wording, slang, or cartoonish substitutions.
+13) Before moving past the restatement stage, self-check: if the restatement still sounds like translationese, rewrite it in plainer conversational English.
 
 Return strict JSON with exactly these keys:
 {{
@@ -512,39 +515,42 @@ Iteration: {iteration}
 Task:
 1) Write observations first as an exploration pass, including alternative wording/structure options.
 2) In observations, explore options broadly and spend time testing different ways to say each hard part.
-3) In observations, first restate what the paragraph is saying in very simple plain language, then interpolate between that restatement and a source-close rendering before choosing final phrasing.
-4) Produce an improved modern English translation for this paragraph.
-5) Use prior judgment context (if provided) to fix weaknesses.
-6) Balance these goals:
+3) In observations, begin with a true plain-language restatement (1-2 short sentences) that sounds like natural conversation for the target audience.
+4) The plain restatement must avoid source-shaped syntax and abstract calque wording.
+5) After the plain restatement, add a source-close sketch and interpolate between them before choosing final phrasing.
+6) Produce an improved modern English translation for this paragraph.
+7) Use prior judgment context (if provided) to fix weaknesses.
+8) Balance these goals:
 {GOALS_GUIDANCE}
-7) Keep one paragraph and preserve core meaning and imagery.
-8) Translate by meaning, not by source-language syntax; re-cast structure where needed so the result sounds natural to a modern reader.
-9) Before finalizing, deliberately explore multiple plausible phrasings and choose the one that is clearest and most natural while preserving meaning.
-10) Keep the tone clear and dignified: simple modern English without cutesy wording, slang, or cartoonish substitutions.
-11) Keep key concepts intact; do not replace them with loose kid-style stand-ins.
-12) Prefer idiomatic English over one-to-one calques: if a literal abstract pairing sounds clunky, combine or recast it into one smoother plain-English idea that preserves meaning.
-13) It is acceptable to merge near-synonymous abstract source terms into one clear audience-appropriate phrase when that improves natural flow without changing core meaning.
-14) Keep source personification only when it sounds natural in English; otherwise restate the meaning in plain language.
-15) Avoid stacked abstractions; prefer one concrete, natural phrase when conveying abstract modality/uncertainty ideas.
-16) Simplify by rephrasing, not by deleting meaning: keep all core relations from the source even when wording becomes shorter and easier.
-17) Prefer concrete event-style wording over meta-language chains; rewrite abstract phrasing into natural clauses the target audience can follow in one pass.
-18) If a source-shaped sentence still sounds stiff after interpolation, rewrite it again with a new English structure and only keep the core meaning.
-19) You may change grammatical subject, voice, and clause order when needed for natural English, as long as the same events/relations remain.
-20) Readability for the stated audience takes priority over lexical mirroring when both cannot be maximized at once.
-21) In observations, explicitly test at least one bolder paraphrase that breaks source syntax, then keep whichever option reads most naturally while preserving meaning.
-22) If personification sounds forced in English, convert it into plain condition/process wording while preserving meaning.
-23) Prefer everyday verbs for the target audience over rhetorical verbs when both preserve meaning.
-24) Avoid formal scaffolding phrases that sound bookish to the target audience; prefer direct plain-English sentence openings.
-25) Avoid passage-specific wording templates; adapt phrasing to the current passage and keep instructions general.
-26) Prefer the simplest audience-appropriate synonym that preserves meaning; avoid unnecessary mid-register vocabulary.
-27) Avoid pronoun chains with unclear referents; make actor/action relationships explicit in plain English.
-28) If multiple source terms collapse to one plain-English idea for the target audience, prefer one clear phrase unless keeping both is necessary to preserve a real contrast.
-29) Match vocabulary difficulty to the target audience; prefer common high-frequency words when they preserve meaning.
-30) If a term may be above the target audience level, rewrite it into a simpler equivalent.
-31) Preserve clear domain terms when they are already understandable (for example, keep terms like myth or history); do not replace them with childish stand-ins unless clarity requires it.
-32) For younger target audiences, prefer concrete everyday phrasing over abstract modality adjectives when meaning is preserved.
-33) For uncertainty/plausibility ideas, prefer concrete real-world wording the target audience can picture.
-34) For younger audiences, avoid low-frequency abstract modality adjectives unless they are strictly necessary for meaning.
+9) Keep one paragraph and preserve core meaning and imagery.
+10) Translate by meaning, not by source-language syntax; re-cast structure where needed so the result sounds natural to a modern reader.
+11) Before finalizing, deliberately explore multiple plausible phrasings and choose the one that is clearest and most natural while preserving meaning.
+12) Keep the tone clear and dignified: simple modern English without cutesy wording, slang, or cartoonish substitutions.
+13) Keep key concepts intact; do not replace them with loose kid-style stand-ins.
+14) Prefer idiomatic English over one-to-one calques: if a literal abstract pairing sounds clunky, combine or recast it into one smoother plain-English idea that preserves meaning.
+15) It is acceptable to merge near-synonymous abstract source terms into one clear audience-appropriate phrase when that improves natural flow without changing core meaning.
+16) Keep source personification only when it sounds natural in English; otherwise restate the meaning in plain language.
+17) Avoid stacked abstractions; prefer one concrete, natural phrase when conveying abstract modality/uncertainty ideas.
+18) Simplify by rephrasing, not by deleting meaning: keep all core relations from the source even when wording becomes shorter and easier.
+19) Prefer concrete event-style wording over meta-language chains; rewrite abstract phrasing into natural clauses the target audience can follow in one pass.
+20) If a source-shaped sentence still sounds stiff after interpolation, rewrite it again with a new English structure and only keep the core meaning.
+21) You may change grammatical subject, voice, and clause order when needed for natural English, as long as the same events/relations remain.
+22) Readability for the stated audience takes priority over lexical mirroring when both cannot be maximized at once.
+23) In observations, explicitly test at least one bolder paraphrase that breaks source syntax, then keep whichever option reads most naturally while preserving meaning.
+24) If personification sounds forced in English, convert it into plain condition/process wording while preserving meaning.
+25) Prefer everyday verbs for the target audience over rhetorical verbs when both preserve meaning.
+26) Avoid formal scaffolding phrases that sound bookish to the target audience; prefer direct plain-English sentence openings.
+27) Avoid passage-specific wording templates; adapt phrasing to the current passage and keep instructions general.
+28) Prefer the simplest audience-appropriate synonym that preserves meaning; avoid unnecessary mid-register vocabulary.
+29) Avoid pronoun chains with unclear referents; make actor/action relationships explicit in plain English.
+30) If multiple source terms collapse to one plain-English idea for the target audience, prefer one clear phrase unless keeping both is necessary to preserve a real contrast.
+31) Match vocabulary difficulty to the target audience; prefer common high-frequency words when they preserve meaning.
+32) If a term may be above the target audience level, rewrite it into a simpler equivalent.
+33) Preserve clear domain terms when they are already understandable (for example, keep terms like myth or history); do not replace them with childish stand-ins unless clarity requires it.
+34) For younger target audiences, prefer concrete everyday phrasing over abstract modality adjectives when meaning is preserved.
+35) For uncertainty/plausibility ideas, prefer concrete real-world wording the target audience can picture.
+36) For younger audiences, avoid low-frequency abstract modality adjectives unless they are strictly necessary for meaning.
+37) Before finalizing, self-check the plain restatement: if it still reads like a translation of the source, rewrite it in more conversational everyday English.
 
 Return strict JSON with exactly these keys:
 {{
