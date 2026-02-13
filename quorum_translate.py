@@ -723,8 +723,7 @@ def sequential_polish_prompt(
         "Rewrite once for natural readability while preserving meaning. Output JSON only."
     )
     user = f"""
-Paragraph {paragraph_index} Greek:
-{greek}
+Paragraph {paragraph_index} selected draft:
 
 User preference prompt:
 {user_preference}
@@ -734,7 +733,7 @@ Selected translation to polish:
 
 Task:
 1) Rewrite this translation once for final publication quality.
-2) Keep one paragraph and preserve the same core meaning, relations, and contrasts.
+2) Keep one paragraph and preserve the same core meaning, relations, and contrasts from the selected draft.
 3) Do not add new meaning or remove core meaning.
 4) Prioritize natural readability for the target audience and keep tone clear and dignified.
 5) Keep phrasing closer to plain natural English than source-shaped diction.
