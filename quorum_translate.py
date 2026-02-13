@@ -547,7 +547,7 @@ Task:
 31) If multiple source terms collapse to one plain-English idea for the target audience, prefer one clear phrase unless keeping both is necessary to preserve a real contrast.
 32) Match vocabulary difficulty to the target audience; prefer common high-frequency words when they preserve meaning.
 33) If a term may be above the target audience level, rewrite it into a simpler equivalent.
-34) Preserve clear domain terms when they are already understandable (for example, keep terms like myth or history); do not replace them with childish stand-ins unless clarity requires it.
+34) Preserve clear domain terms when they are already understandable; do not replace them with childish stand-ins unless clarity requires it.
 35) For younger target audiences, prefer concrete everyday phrasing over abstract language when meaning is preserved.
 36) Before finalizing, self-check the plain restatement: if it still reads like a translation of the source, rewrite it in more conversational everyday English.
 
