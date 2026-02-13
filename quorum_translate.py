@@ -743,6 +743,7 @@ Task:
 9) If any phrase sounds translated, rewrite it into natural modern English while preserving meaning.
 10) If a clause describes an abstract relation indirectly, rewrite it as a direct plain-language outcome.
 11) You may substantially rephrase clause structure when needed for natural readability, as long as meaning is preserved.
+12) If two nearby clauses express nearly the same idea, collapse them into one clear plain clause.
 
 Return strict JSON with exactly these keys:
 {{
