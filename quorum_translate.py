@@ -583,6 +583,7 @@ Also judge with these priorities:
 8) Treat reference translations as semantic checks only, not style targets.
 9) Penalize mechanism-heavy translationese phrasing with abstract-noun chains when a direct outcome phrasing would preserve meaning.
 10) Give concrete rewrite proposals, not generic feedback.
+11) Penalize constructions that explain abstract relations indirectly when a direct plain-language outcome would be clearer.
 
 Return strict JSON with exactly these keys:
 {{
@@ -702,6 +703,7 @@ Task:
 8) Prefer direct plain verbs over metaphor-mechanics wording when meaning is unchanged.
 9) Prefer reader-facing outcome phrasing over mechanism chains with abstract nouns.
 10) If any phrase sounds translated, rewrite it into natural modern English while preserving meaning.
+11) If a clause describes an abstract relation indirectly, rewrite it as a direct plain-language outcome.
 
 Return strict JSON with exactly these keys:
 {{
