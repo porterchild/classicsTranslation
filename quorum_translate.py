@@ -513,24 +513,22 @@ User preference prompt:
 Iteration: {iteration}
 {previous_translation_block}{previous_judgment_block}
 Task:
-1) Start with observations as pre-translation exploration.
-2) In observations, include:
+1) Write observations first as a quick exploration pass. Include:
    a) a concise plain-language restatement in natural conversation for the target audience,
    b) a brief source-close sketch,
    c) a few candidate phrasings, including at least one that breaks source syntax.
-3) Then produce an improved modern English translation for this paragraph (single paragraph).
-4) Use prior judgment context (if provided) to fix weaknesses.
-5) Prioritize the user preference prompt, then balance these goals:
+2) Then produce one improved modern English translation for this paragraph (single paragraph).
+3) Use prior judgment context (if provided) to fix weaknesses.
+4) Prioritize the user preference prompt, then balance these goals:
 {GOALS_GUIDANCE}
-6) Preserve core meaning, key contrasts, and imagery; do not add new meaning.
-7) Translate by meaning, not source syntax: change subject, voice, and clause order when needed for natural English.
-8) Prefer clear, concrete, audience-appropriate wording and avoid calque-like abstraction.
-9) Keep the tone clear and dignified: avoid cutesy wording, slang, and bookish scaffolding.
-10) If faithfulness and readability conflict, keep core meaning/relations and favor natural readability for the stated audience.
-11) If carried-over personification sounds stiff, restate the same intent directly in natural prose.
-12) Use reference translations for meaning checks only; do not imitate their diction or syntax.
-13) Keep final wording closer to your plain-language restatement than to your source-close sketch, unless meaning would be lost.
-14) Final self-check: if it still sounds source-shaped, rewrite once more in plain natural English.
+5) Preserve core meaning, key contrasts, and imagery. Do not add new meaning.
+6) Translate by meaning, not Greek structure. Rewrite syntax freely for natural English.
+7) Prefer clear, concrete, audience-appropriate wording. Keep a dignified tone (not cutesy, slangy, or bookish).
+8) If faithfulness and readability conflict, keep core meaning/relations but favor natural readability for the stated audience.
+9) Treat reference translations as semantic checks only, not style targets.
+10) If figurative carryover sounds stiff, restate the same intent directly in natural prose.
+11) Final wording should stay closer to your plain-language restatement than to your source-close sketch unless meaning would be lost.
+12) Final self-check: if the result still sounds source-shaped, rewrite once more in plain natural English.
 
 Return strict JSON with exactly these keys:
 {{
@@ -576,12 +574,12 @@ Judge this translation on:
 {GOALS_GUIDANCE}
 Also judge with these priorities:
 1) Prioritize the user preference prompt when scoring and planning revisions.
-2) Check whether the English sounds naturally written for modern readers instead of mirroring Greek structure.
-3) Penalize literal calques, awkward abstraction stacks, forced personification, unclear pronouns, and vocabulary above the target audience level.
-4) Penalize cutesy/slangy/bookish phrasing when a plain dignified option would preserve meaning.
-5) Do not penalize wording merges when they keep the same meaning and improve natural flow.
+2) Prefer natural modern English over Greek-shaped phrasing, while preserving meaning.
+3) Penalize literal calques, abstraction stacks, forced personification, unclear pronouns, and vocabulary above the target audience level.
+4) Penalize cutesy/slangy/bookish phrasing when a plain dignified alternative preserves meaning.
+5) Do not penalize merged wording when it preserves the same meaning and improves flow.
 6) Do not reward simplification that drops any core relation or contrast from the source.
-7) Reward direct intent-level phrasing when figurative carryover sounds stiff but meaning is preserved.
+7) Reward direct intent-level phrasing when figurative carryover sounds stiff.
 8) Treat reference translations as semantic checks only, not style targets.
 9) Give concrete rewrite proposals, not generic feedback.
 
@@ -643,14 +641,14 @@ Candidate iterations:
 {payload}
 
 Task:
-1) Select the strongest candidate iteration for the user preference while preserving core source meaning.
-2) You may rewrite the selected candidate for a stronger final result, but keep one paragraph and do not add new meaning.
+1) Select the strongest candidate for the user preference while preserving core source meaning.
+2) You may rewrite the selected candidate, but keep one paragraph and do not add new meaning.
 3) Prioritize user preference first, then balance faithfulness, readability, and modernity.
 4) If faithfulness and readability conflict, preserve core meaning/relations and favor natural readability for the stated audience.
-5) Prefer clear concrete wording over source-shaped abstraction; avoid cutesy/slangy/bookish phrasing.
-6) Prefer direct intent-level phrasing when figurative carryover sounds stiff and does not improve clarity.
+5) Prefer clear concrete wording over source-shaped abstraction, and avoid cutesy/slangy/bookish phrasing.
+6) Prefer direct intent-level phrasing when figurative carryover sounds stiff.
 7) Treat reference translations as semantic checks only; do not mirror their style.
-8) Prefer outputs whose final phrasing stays closer to plain restatement style than source-close sketch style.
+8) Prefer outputs whose final style stays closer to plain-restatement phrasing than source-close sketch phrasing.
 9) Treat candidate scores as hints only and judge the candidate text directly.
 
 Return strict JSON with exactly these keys:
@@ -658,6 +656,52 @@ Return strict JSON with exactly these keys:
   "selected_iteration": 1,
   "final_translation": "...",
   "justification": "why this is best for the stated preference",
+  "balance_scores": {{
+    "faithfulness": 1-10,
+    "readability": 1-10,
+    "modernity": 1-10
+  }}
+}}
+""".strip()
+    return system, user
+
+
+def sequential_polish_prompt(
+    greek: str,
+    paragraph_index: int,
+    reference_translations: dict[str, str],
+    user_preference: str,
+    selected_translation: str,
+) -> tuple[str, str]:
+    system = (
+        "You are a final plain-English polisher for a translation pipeline. "
+        "Rewrite once for natural readability while preserving meaning. Output JSON only."
+    )
+    refs = reference_context_block(reference_translations)
+    user = f"""
+Paragraph {paragraph_index} Greek:
+{greek}
+
+{refs}
+
+User preference prompt:
+{user_preference}
+
+Selected translation to polish:
+{selected_translation}
+
+Task:
+1) Rewrite this translation once for final publication quality.
+2) Keep one paragraph and preserve the same core meaning, relations, and contrasts.
+3) Do not add new meaning or remove core meaning.
+4) Prioritize natural readability for the target audience and keep tone clear and dignified.
+5) Treat reference translations as semantic checks only, not style targets.
+6) Keep phrasing closer to plain natural English than source-shaped diction.
+
+Return strict JSON with exactly these keys:
+{{
+  "polished_translation": "...",
+  "polish_notes": "brief explanation of key changes",
   "balance_scores": {{
     "faithfulness": 1-10,
     "readability": 1-10,
@@ -1108,10 +1152,32 @@ def run_sequential_pipeline(
                 "overall_judgment": str(selection_result.get("justification", "")).strip(),
                 "scores": selected_scores,
             }
+        system, user = sequential_polish_prompt(
+            greek=greek,
+            paragraph_index=idx,
+            reference_translations=reference_translations,
+            user_preference=normalized_preference,
+            selected_translation=final_translation,
+        )
+        polish_result = call_json(client, model, system, user, temperature=0.2)
+        polished_text = str(polish_result.get("polished_translation", "")).strip()
+        if polished_text:
+            final_translation = polished_text
+        polish_scores = polish_result.get("balance_scores")
+        if isinstance(polish_scores, dict):
+            final_judgment = {
+                "overall_judgment": str(polish_result.get("polish_notes", "")).strip(),
+                "scores": polish_scores,
+            }
         vprint(f"[paragraph {idx}] final sequential translation:", stage="final")
         vprint(final_translation, stage="final")
         vprint(
             f"[paragraph {idx}] selected iteration: {selected_iteration}",
+            stage="final",
+        )
+        vprint(
+            f"[paragraph {idx}] final polish notes: "
+            f"{str(polish_result.get('polish_notes', '')).strip()}",
             stage="final",
         )
         vprint(
@@ -1137,6 +1203,10 @@ def run_sequential_pipeline(
                     "justification": str(final_judgment.get("overall_judgment", "")).strip(),
                     "balance_scores": final_judgment.get("scores", {}),
                     "selected_iteration": selected_iteration,
+                    "polish": {
+                        "notes": str(polish_result.get("polish_notes", "")).strip(),
+                        "scores": polish_result.get("balance_scores", {}),
+                    },
                 },
             }
         )
