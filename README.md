@@ -4,8 +4,16 @@ Simple side-by-side comparison page for the opening of Plutarch's *Parallel Live
 - Greek source text
 - Literal English
 - Legacy published translations
-- AI one-shot translation
 - AI quorum translations with different user preference prompts
+- AI sequential-iteration translations with different user preference prompts
+
+## Current Status
+
+- `index.html` currently shows a 9-column comparison (Greek, literal, two legacy, and multiple AI outputs).
+- Translation pipelines are modular in `main.py` (`debate` and `sequential`).
+- API key loading is programmatic: scripts read `.env` via `OPENROUTER_API_KEY` (fallback `OPENAI_API_KEY`).
+- Run artifacts are stored under `runs/`; markdown result files can be committed, while `.log` files are ignored.
+- JSON artifacts were removed; run outputs are markdown plus log files.
 
 ## Quick Start
 
@@ -16,7 +24,13 @@ Simple side-by-side comparison page for the opening of Plutarch's *Parallel Live
 ## Quorum Run
 
 ```bash
-.venv/bin/python quorum_translate.py --model x-ai/grok-4.1-fast --iterations 2 --verbose --output-prefix runs/quorum_translation --preference "Prioritize short, direct sentences with minimal archaic phrasing." > runs/quorum_run.log 2>&1
+.venv/bin/python main.py --model x-ai/grok-4.1-fast --iterations 2 --verbose --output-prefix runs/quorum_translation --preference "Prioritize short, direct sentences with minimal archaic phrasing." > runs/quorum_run.log 2>&1
+```
+
+## Focused Paragraph Run
+
+```bash
+.venv/bin/python run_theseus_paragraph3.py --preference "This should be readable by a 7th grader." --iterations 4 --output-prefix runs/theseus_paragraph3 > runs/theseus_paragraph3.log 2>&1
 ```
 
 ## Flow Chart

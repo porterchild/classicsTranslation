@@ -187,6 +187,17 @@ def load_dotenv(path: Path) -> None:
         os.environ.setdefault(key, value)
 
 
+def get_api_key(dotenv_path: Path = Path(".env")) -> str | None:
+    load_dotenv(dotenv_path)
+    api_key = (os.getenv("OPENROUTER_API_KEY") or "").strip()
+    if api_key:
+        return api_key
+    fallback = (os.getenv("OPENAI_API_KEY") or "").strip()
+    if fallback:
+        return fallback
+    return None
+
+
 def parse_json_object(text: str) -> dict[str, Any]:
     raw = text.strip()
     if raw.startswith("```"):
@@ -1412,8 +1423,7 @@ def main() -> int:
         print("--iterations must be >= 1", file=sys.stderr)
         return 2
 
-    load_dotenv(Path(".env"))
-    api_key = os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENAI_API_KEY")
+    api_key = get_api_key(Path(".env"))
     if not api_key:
         print("Missing OPENROUTER_API_KEY (or OPENAI_API_KEY) in environment/.env.", file=sys.stderr)
         return 2

@@ -2,4 +2,4 @@
 .venv/*
 __pycache__/*
 translation_instructions.txt
-runs/*
+runs/*.log
