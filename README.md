@@ -10,7 +10,7 @@ Simple side-by-side comparison page for the opening of Plutarch's *Parallel Live
 ## Current Status
 
 - `index.html` currently shows a 9-column comparison (Greek, literal, two legacy, and multiple AI outputs).
-- Translation pipelines are modular in `main.py` (`debate` and `sequential`).
+- Translation pipelines are modular in `main.py` (`debate`, `sequential`, `cognitive_user`, `cognitive_dualloop`).
 - API key loading is programmatic: scripts read `.env` via `OPENROUTER_API_KEY` (fallback `OPENAI_API_KEY`).
 - Run artifacts are stored under `runs/`; markdown result files can be committed, while `.log` files are ignored.
 - JSON artifacts were removed; run outputs are markdown plus log files.
@@ -31,6 +31,16 @@ Simple side-by-side comparison page for the opening of Plutarch's *Parallel Live
 
 ```bash
 .venv/bin/python run_theseus_paragraph3.py --preference "This should be readable by a 7th grader." --iterations 4 --output-prefix runs/theseus_paragraph3 > runs/theseus_paragraph3.log 2>&1
+```
+
+## Cognitive Pipelines
+
+```bash
+.venv/bin/python main.py --pipeline cognitive_user --iterations 1 --output-prefix runs/cognitive_user_r1 --preference "This should be readable by a 7 year old." > runs/cognitive_user_r1.log 2>&1
+```
+
+```bash
+.venv/bin/python main.py --pipeline cognitive_dualloop --iterations 1 --output-prefix runs/cognitive_dualloop_r1 --preference "This should be readable by a 7 year old." > runs/cognitive_dualloop_r1.log 2>&1
 ```
 
 ## Flow Chart

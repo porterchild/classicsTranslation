@@ -3,3 +3,4 @@
 __pycache__/*
 translation_instructions.txt
 runs/*.log
+*.pyc
