@@ -1,0 +1,148 @@
+{
+  "model": "local_model",
+  "rows": [
+    {
+      "label": "off_topic_fluent",
+      "text": "This paragraph is about making bread: first mix flour and water, then knead the dough until smooth. If the dough stays sticky, add more flour and let it rest before baking.",
+      "available": true,
+      "perplexity": 24.604583609807175,
+      "avg_logprob": -3.2029327511837757,
+      "token_count": 37,
+      "expansion_steps": 5,
+      "reason": "",
+      "resolved_model": "glm4.7flash.gguf"
+    },
+    {
+      "label": "wrong_but_fluent",
+      "text": "I want to keep these myths exactly as they are, because wild stories are better than history. If they sound impossible, that is fine; readers should enjoy the fantasy and stop worrying about facts.",
+      "available": true,
+      "perplexity": 60.629531568446566,
+      "avg_logprob": -4.104782093984959,
+      "token_count": 39,
+      "expansion_steps": 4,
+      "reason": "",
+      "resolved_model": "glm4.7flash.gguf"
+    },
+    {
+      "label": "smooth_user_style_4",
+      "text": "I hope I can make these myths seem like real history, but if not, I hope you'll still enjoy these old stories",
+      "available": true,
+      "perplexity": 163.86683729980638,
+      "avg_logprob": -5.099054130315781,
+      "token_count": 25,
+      "expansion_steps": 6,
+      "reason": "",
+      "resolved_model": "glm4.7flash.gguf"
+    },
+    {
+      "label": "archaic_style",
+      "text": "May it please us to have fable, being purged by reason, submit and wear the aspect of history; but where it proudly refuseth the probable and admitteth not any mingling with likelihood, we must crave indulgent auditors.",
+      "available": true,
+      "perplexity": 169.42862825754605,
+      "avg_logprob": -5.1324317659178345,
+      "token_count": 51,
+      "expansion_steps": 8,
+      "reason": "",
+      "resolved_model": "glm4.7flash.gguf"
+    },
+    {
+      "label": "smooth_user_style_2",
+      "text": "I want to make these myths read like real history. If some stories still do not feel possible, I will ask readers to be kind and patient with ancient accounts.",
+      "available": true,
+      "perplexity": 179.47898480657503,
+      "avg_logprob": -5.19005812478788,
+      "token_count": 33,
+      "expansion_steps": 4,
+      "reason": "",
+      "resolved_model": "glm4.7flash.gguf"
+    },
+    {
+      "label": "smooth_user_style_1",
+      "text": "I hope I can make these myths seem like real history. But if a story still does not sound believable, I will need patient readers who accept old traditions.",
+      "available": true,
+      "perplexity": 200.17056212735798,
+      "avg_logprob": -5.299169813748449,
+      "token_count": 32,
+      "expansion_steps": 5,
+      "reason": "",
+      "resolved_model": "glm4.7flash.gguf"
+    },
+    {
+      "label": "smooth_readable",
+      "text": "It would be nice if reason cleaned the pretend parts so we could see the real history. But if they ignore what makes sense and won't fit likely facts, we'll need kind listeners who calmly accept the old tales.",
+      "available": true,
+      "perplexity": 235.01427663139302,
+      "avg_logprob": -5.459646263921803,
+      "token_count": 44,
+      "expansion_steps": 9,
+      "reason": "",
+      "resolved_model": "glm4.7flash.gguf"
+    },
+    {
+      "label": "smooth_simpler",
+      "text": "I hope reason can clean up the myth parts so we can see real history. But if those stories won't sound believable or fit what could happen, we need patient readers who accept old stories.",
+      "available": true,
+      "perplexity": 294.81252380827465,
+      "avg_logprob": -5.686339641801822,
+      "token_count": 39,
+      "expansion_steps": 7,
+      "reason": "",
+      "resolved_model": "glm4.7flash.gguf"
+    },
+    {
+      "label": "smooth_user_style_3",
+      "text": "I hope to make these myths feel like real history. But when a story still sounds impossible, I ask readers to be understanding with old tales.",
+      "available": true,
+      "perplexity": 294.99107808445615,
+      "avg_logprob": -5.686945112100963,
+      "token_count": 29,
+      "expansion_steps": 4,
+      "reason": "",
+      "resolved_model": "glm4.7flash.gguf"
+    },
+    {
+      "label": "literal_awkward",
+      "text": "May it be for us, with the mythical being purified by reason, to obey and take on the sight of history; but wherever it stubbornly despises the plausible and does not receive mixture toward the likely, we shall need kindly hearers.",
+      "available": true,
+      "perplexity": 320.91078221551265,
+      "avg_logprob": -5.771163147475038,
+      "token_count": 49,
+      "expansion_steps": 13,
+      "reason": "",
+      "resolved_model": "glm4.7flash.gguf"
+    },
+    {
+      "label": "calque_heavy",
+      "text": "Would that for us the mythic, reason-cleansed, obey and take history's view; where it haughtily scorns the probable and admits not admixture with the likely, we will request well-disposed listeners receiving antiquity gently.",
+      "available": true,
+      "perplexity": 417.299948147543,
+      "avg_logprob": -6.033805263340473,
+      "token_count": 50,
+      "expansion_steps": 11,
+      "reason": "",
+      "resolved_model": "glm4.7flash.gguf"
+    },
+    {
+      "label": "broken_english",
+      "text": "Reason clean myth thing yes and history look happen. If story no plausible and no mix probable, we need people nice accept old stuff.",
+      "available": true,
+      "perplexity": 2063.696526282449,
+      "avg_logprob": -7.632254083951314,
+      "token_count": 27,
+      "expansion_steps": 8,
+      "reason": "",
+      "resolved_model": "glm4.7flash.gguf"
+    },
+    {
+      "label": "word_salad",
+      "text": "Purified obeying plausible mixture antiquity listeners probable view history mythic receives stubbornly clear maybe unless therefore however.",
+      "available": true,
+      "perplexity": 5822.975625657852,
+      "avg_logprob": -8.66956668595473,
+      "token_count": 24,
+      "expansion_steps": 18,
+      "reason": "",
+      "resolved_model": "glm4.7flash.gguf"
+    }
+  ]
+}

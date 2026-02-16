@@ -1,0 +1,18 @@
+Perplexity sampling v3 (local_model)
+
+off_topic_fluent     ppl=   24.605 avg_lp= -3.2029 tok= 37 exp=  5
+wrong_but_fluent     ppl=   60.630 avg_lp= -4.1048 tok= 39 exp=  4
+smooth_user_style_4  ppl=  163.867 avg_lp= -5.0991 tok= 25 exp=  6
+archaic_style        ppl=  169.429 avg_lp= -5.1324 tok= 51 exp=  8
+smooth_user_style_2  ppl=  179.479 avg_lp= -5.1901 tok= 33 exp=  4
+smooth_user_style_1  ppl=  200.171 avg_lp= -5.2992 tok= 32 exp=  5
+smooth_readable      ppl=  235.014 avg_lp= -5.4596 tok= 44 exp=  9
+smooth_simpler       ppl=  294.813 avg_lp= -5.6863 tok= 39 exp=  7
+smooth_user_style_3  ppl=  294.991 avg_lp= -5.6869 tok= 29 exp=  4
+literal_awkward      ppl=  320.911 avg_lp= -5.7712 tok= 49 exp= 13
+calque_heavy         ppl=  417.300 avg_lp= -6.0338 tok= 50 exp= 11
+broken_english       ppl= 2063.697 avg_lp= -7.6323 tok= 27 exp=  8
+word_salad           ppl= 5822.976 avg_lp= -8.6696 tok= 24 exp= 18
+
+Wrote runs/perplexity_sampling_v3.json
+Wrote runs/perplexity_sampling_v3.md

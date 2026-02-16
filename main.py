@@ -15,6 +15,7 @@ from pipelines.cognitive_dualloop import run_dualloop_cognitive_pipeline
 from pipelines.cognitive_user import run_user_cognitive_pipeline
 from pipelines.debate import run_debate_pipeline
 from pipelines.sequential import run_sequential_pipeline
+from translation_feedback_mechanisms import compute_smoothness_feedback_from_perplexity
 
 DEFAULT_MODEL = "x-ai/grok-4.1-fast"
 DEFAULT_ITERATIONS = 2
@@ -231,6 +232,7 @@ def run_pipeline(
     verbose: bool,
     color_mode: str,
     user_preference: str,
+    sequential_feedback_model: str | None,
     pipeline: str,
 ) -> dict[str, Any]:
     if pipeline == "debate":
@@ -253,6 +255,32 @@ def run_pipeline(
             perrin_paragraphs=DEFAULT_PERRIN_PARAGRAPHS,
         )
     if pipeline == "sequential":
+        if sequential_feedback_model:
+            preflight = compute_smoothness_feedback_from_perplexity(
+                client=client,
+                model=sequential_feedback_model,
+                text="Perplexity preflight check sentence.",
+                timeout=45,
+            )
+            if not preflight.get("available"):
+                reason = str(preflight.get("reason", "unavailable")).strip()
+                raise ValueError(
+                    "Perplexity feedback preflight failed for "
+                    f"model '{sequential_feedback_model}': {reason}"
+                )
+            if verbose:
+                ppl = preflight.get("perplexity")
+                tok = preflight.get("token_count")
+                resolved = str(preflight.get("resolved_model", "")).strip()
+                ppl_str = f"{float(ppl):.3f}" if isinstance(ppl, (int, float)) else "n/a"
+                tok_str = str(tok) if isinstance(tok, int) else "n/a"
+                resolved_note = f", resolved_model={resolved}" if resolved else ""
+                print(
+                    "[preflight] perplexity feedback ready: "
+                    f"model={sequential_feedback_model}{resolved_note}, "
+                    f"perplexity={ppl_str}, token_count={tok_str}",
+                    file=sys.stderr,
+                )
         return run_sequential_pipeline(
             client=client,
             model=model,
@@ -270,6 +298,7 @@ def run_pipeline(
             goals_guidance=GOALS_GUIDANCE,
             dryden_paragraphs=DEFAULT_DRYDEN_CLOUGH_PARAGRAPHS,
             perrin_paragraphs=DEFAULT_PERRIN_PARAGRAPHS,
+            feedback_model=sequential_feedback_model,
         )
     if pipeline == "cognitive_user":
         return run_user_cognitive_pipeline(
@@ -410,6 +439,15 @@ def parse_args() -> argparse.Namespace:
         default="",
         help="User preference prompt to prioritize while balancing faithfulness/readability/modernity.",
     )
+    parser.add_argument(
+        "--sequential-feedback-model",
+        default="",
+        help=(
+            "Optional model for sequential perplexity feedback. "
+            "Use 'local_model' for llama.cpp at localhost:8081, "
+            "If unavailable, the run fails before translation starts."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -435,16 +473,21 @@ def main() -> int:
         base_url=OPENROUTER_BASE_URL,
     )
 
-    result = run_pipeline(
-        client=client,
-        model=args.model,
-        greek_paragraphs=DEFAULT_GREEK_PARAGRAPHS,
-        iterations=iterations,
-        verbose=args.verbose,
-        color_mode=args.color,
-        user_preference=args.preference,
-        pipeline=args.pipeline,
-    )
+    try:
+        result = run_pipeline(
+            client=client,
+            model=args.model,
+            greek_paragraphs=DEFAULT_GREEK_PARAGRAPHS,
+            iterations=iterations,
+            verbose=args.verbose,
+            color_mode=args.color,
+            user_preference=args.preference,
+            sequential_feedback_model=(args.sequential_feedback_model or "").strip() or None,
+            pipeline=args.pipeline,
+        )
+    except ValueError as exc:
+        print(str(exc), file=sys.stderr)
+        return 2
 
     prefix = Path(args.output_prefix)
     prefix.parent.mkdir(parents=True, exist_ok=True)

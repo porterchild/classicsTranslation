@@ -6,6 +6,10 @@ import sys
 from typing import Any, Callable
 
 from openai import OpenAI
+from translation_feedback_mechanisms import (
+    compute_smoothness_feedback_from_perplexity,
+    format_smoothness_feedback_for_prompt,
+)
 
 from .common import reference_context_block, reference_translations_for_index
 
@@ -129,12 +133,19 @@ def sequential_judge_prompt(
     user_preference: str,
     goals_guidance: str,
     iteration: int,
+    external_feedback_summary: str | None,
 ) -> tuple[str, str]:
     system = (
         "You are a strict self-critic for a translation iteration. "
         "Judge against instructions and provide actionable revision feedback. Output JSON only."
     )
     refs = reference_context_block(reference_translations)
+    external_feedback_block = ""
+    if external_feedback_summary:
+        external_feedback_block = f"""
+Optional perplexity feedback (secondary signal only):
+{external_feedback_summary}
+"""
     user = f"""
 Paragraph {paragraph_index} Greek:
 {greek}
@@ -147,6 +158,7 @@ User preference prompt:
 Iteration: {iteration}
 Translation to judge:
 {translation}
+{external_feedback_block}
 
 Judge this translation on:
 {goals_guidance}
@@ -163,6 +175,7 @@ Also judge with these priorities:
 10) Give concrete rewrite proposals, not generic feedback.
 11) Penalize constructions that explain abstract relations indirectly when a direct plain-language outcome would be clearer.
 12) Penalize lexical/style borrowing from reference translations when fresh plain wording would preserve meaning.
+13) Treat perplexity feedback as weak and local; never let it override faithfulness or source logic.
 
 Return strict JSON with exactly these keys:
 {{
@@ -206,6 +219,7 @@ def sequential_selection_prompt(
                 "judge_summary": judgment_step.get("overall_judgment", ""),
                 "judge_issues": judgment_step.get("issues", ""),
                 "judge_plan": judgment_step.get("revision_plan", ""),
+                "external_feedback_summary": translation_step.get("external_feedback_summary", ""),
             }
         )
     payload = json.dumps(compact_iters, ensure_ascii=False, indent=2)
@@ -316,6 +330,9 @@ def run_sequential_pipeline(
     goals_guidance: str,
     dryden_paragraphs: list[str],
     perrin_paragraphs: list[str],
+    feedback_model: str | None = None,
+    compute_feedback_fn: Callable[..., dict[str, Any]] = compute_smoothness_feedback_from_perplexity,
+    format_feedback_fn: Callable[[dict[str, Any]], str] = format_smoothness_feedback_for_prompt,
 ) -> dict[str, Any]:
     paragraphs: list[dict[str, Any]] = []
     color_enabled = should_use_color_fn(color_mode)
@@ -386,6 +403,22 @@ def run_sequential_pipeline(
             translation_result = call_json_fn(client, model, system, user, temperature=0.45)
             current_translation = str(translation_result.get("translation", "")).strip()
             observations = str(translation_result.get("observations", "")).strip()
+            external_feedback_summary = ""
+
+            if feedback_model and current_translation:
+                feedback_payload = compute_feedback_fn(
+                    client=client,
+                    model=feedback_model,
+                    text=current_translation,
+                )
+                external_feedback_summary = format_feedback_fn(feedback_payload).strip()
+                translation_result["external_feedback"] = feedback_payload
+                translation_result["external_feedback_summary"] = external_feedback_summary
+                vprint(
+                    f"[paragraph {idx}] [iter {it}] [sequential] perplexity feedback: "
+                    f"{external_feedback_summary}",
+                    stage="reference",
+                )
 
             vprint(
                 f"[paragraph {idx}] [iter {it}] [sequential] observations: {observations}",
@@ -408,6 +441,7 @@ def run_sequential_pipeline(
                 user_preference=normalized_preference,
                 goals_guidance=goals_guidance,
                 iteration=it,
+                external_feedback_summary=external_feedback_summary or None,
             )
             current_judgment = call_json_fn(client, model, system, user, temperature=0.3)
             vprint(
@@ -553,4 +587,3 @@ def run_sequential_pipeline(
         "paragraphs": paragraphs,
         "final_translation": full_translation,
     }
-

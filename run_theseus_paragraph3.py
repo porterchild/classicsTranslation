@@ -66,16 +66,21 @@ def run_cli() -> int:
     main.DEFAULT_DRYDEN_CLOUGH_PARAGRAPHS = [main.DEFAULT_DRYDEN_CLOUGH_PARAGRAPHS[2]]
     main.DEFAULT_PERRIN_PARAGRAPHS = [main.DEFAULT_PERRIN_PARAGRAPHS[2]]
 
-    result = main.run_pipeline(
-        client=client,
-        model=args.model,
-        greek_paragraphs=[main.DEFAULT_GREEK_PARAGRAPHS[2]],
-        iterations=args.iterations,
-        verbose=not args.quiet,
-        color_mode=args.color,
-        user_preference=args.preference,
-        pipeline="sequential",
-    )
+    try:
+        result = main.run_pipeline(
+            client=client,
+            model=args.model,
+            greek_paragraphs=[main.DEFAULT_GREEK_PARAGRAPHS[2]],
+            iterations=args.iterations,
+            verbose=not args.quiet,
+            color_mode=args.color,
+            user_preference=args.preference,
+            sequential_feedback_model=None,
+            pipeline="sequential",
+        )
+    except ValueError as exc:
+        print(str(exc), file=sys.stderr)
+        return 2
 
     prefix = Path(args.output_prefix)
     prefix.parent.mkdir(parents=True, exist_ok=True)
