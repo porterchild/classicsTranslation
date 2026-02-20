@@ -172,17 +172,21 @@ Multilingual embedding model (qwen/qwen3-embedding-8b via OpenRouter) embeds Gre
 - **Practical uses**: (1) **Tracking relative change over iterations** — absolute scores are noisy but direction of change (did similarity go up or down after a revision?) could flag regressions; needs more experimentation to interpret. (2) **Tiebreaking between candidates** — when two translations are otherwise close, higher similarity to source is a reasonable differentiator. (3) **Sanity checking / miswiring detection** — catches wrong-paragraph contamination, completely off-topic output, or garbled pipeline feeds (anything below ~0.55 warrants investigation). (4) **Effort allocation** — paragraphs or clauses with low phrase-level MIN scores identify difficult sections to escalate to a more intensive pipeline or to a human translator.
 - **Cannot replace** structured faithfulness checking for subtle errors — those need back-translation or entity/relation extraction. Example: Greek says myths "stubbornly disdain plausibility and refuse mixture with the probable" (αὐθαδῶς τοῦ πιθανοῦ περιφρονῇ); a variant saying myths "readily accept being made plausible" scored 0.69, nearly identical to correct translations, because the same content words appear in both.
 
+#### Back-Translation Divergence (faithfulness) — `translation_feedback_mechanisms.py`
+Translates English back to Ancient Greek via LLM, then compares embedding similarity between back-translated Greek and original Greek (same-language comparison).
+- **What it catches**: Omissions and truncations clearly. `drops_second_half` (translation covering only half the Greek) scored 0.59–0.63 vs 0.71–0.84 for full translations — clean, actionable gap. Reasoning mode improved separation: without reasoning `drops_second_half` scored 0.676; with reasoning 0.591.
+- **What it misses**: Semantic inversions and synonym substitutions. `reverses_stubbornness` ("readily accepts" instead of "disdains") scored *higher* than faithful translations (0.80) because the same content words (πιθανόν, μῖξιν, εἰκός) survive the round-trip unchanged. `misread_archaeology` scored highest overall (0.84) because ἀρχαιολογίαν anchors both versions. The polarity-carrying verbs don't survive; the content nouns do.
+- **Verdict**: Good floor/omission detector, not worth the cost (doubles LLM calls per candidate) as a per-iteration signal. Best used as a final sanity pass on the winning translation, not per-candidate per-iteration.
+
+#### Entity/Relation Extraction (faithfulness) — `translation_feedback_mechanisms.py`
+LLM extracts entities, relations, contrasts, and modal stance from Greek source (once per paragraph); substring word matching checks each item against candidate translations.
+- **Extraction quality**: Good with reasoning. Correctly returns empty entities for paragraphs with no named people/places. Relations and modal stance are precise (e.g. "optative wish (εἴη) for ideal scenario; conditional subjunctive (ὅπου δ᾽ ἂν) leading to future necessity (δεησόμεθα)").
+- **What it catches**: Omissions and truncations. `drops_second_half` scored 57% — three items from the conditional clause are simply absent. Legitimate gap.
+- **What it misses**: Semantic inversions and entity swaps. `reverses_stubbornness` scores 100% because "plausible" satisfies "it arrogantly despises the plausible" and "mixture"/"probable" satisfy "it rejects the mixture with the probable." `entity_swap` ("writers" instead of "listeners") also scores 100% because common words satisfy every item.
+- **Root cause**: The `any(word in translation)` matching checks if *any* content word from a relation phrase appears anywhere in the translation. Common content nouns (plausible, probable, mixture) appear in both faithful and inverted translations. Polarity-carrying verbs (despises, rejects) lose to nouns.
+- **Next step for matching**: Filter stopwords and require predicate verbs to match, or replace substring matching with a targeted LLM yes/no check per relation item.
+
 ### Not Yet Implemented
-
-#### Back-Translation Divergence (faithfulness)
-Translate the English back to Greek with a different model, then compare semantic similarity to the original Greek.
-- **Strengths**: Strongest available closed-loop faithfulness signal. If meaning was dropped or distorted, the round-trip will show it — the back-translation will diverge from the source in detectable ways. Uses infrastructure already in place (just another `call_json` with reversed direction). Can be compared at multiple granularities (whole paragraph, clause-level alignment).
-- **Weaknesses**: Expensive — doubles API calls per candidate. The back-translation model has its own biases; errors in the back-translation step can create false positives. Requires a comparison metric for the Greek texts (embedding similarity, or another LLM call to judge). Paraphrases that preserve meaning perfectly will still show some divergence because languages don't round-trip cleanly.
-
-#### Entity/Relation Extraction (faithfulness)
-Extract named entities, causal relations, and key contrasts from the Greek source, then verify each appears in the English translation.
-- **Strengths**: Surgical and interpretable — you know exactly which entity or relation was dropped. For Plutarch specifically, the entity set per paragraph is small and tractable (Sosius Senecio, Lycurgus, Numa, Romulus, the geographer/biographer analogy). Produces actionable feedback: "missing: Numa" is more useful to a revision prompt than "faithfulness: 7/10."
-- **Weaknesses**: Requires either NER models that handle Ancient Greek (rare) or an LLM extraction step (reintroduces self-judgment). Doesn't capture tone, emphasis, or rhetorical structure — only presence/absence of discrete items. Relations are harder to extract reliably than entities. Doesn't scale easily to texts with dense, overlapping argument structures.
 
 #### Archaic Token Lookup (modernity)
 Dictionary lookup against a wordlist of archaic/dated terms (unto, thereof, whilst, hath, etc.).

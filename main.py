@@ -211,6 +211,7 @@ def call_json(
                 ],
                 temperature=temperature,
                 timeout=120,
+                extra_body={"reasoning": {"enabled": True}},
             )
             content = resp.choices[0].message.content or ""
             return parse_json_object(content)
