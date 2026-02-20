@@ -221,5 +221,107 @@ candidate text
 
 The LLM judge still steers revision direction, but external signals ground whether iterations are actually moving on each axis. Pipelines can gate on external scores (stop early if they plateau, keep going if the LLM says "done" but Flesch-Kincaid says grade 14).
 
+## Odyssey Translation Evaluation Loop
+
+An autonomous feedback loop that lets the pipeline improve itself without manual intervention, grounded in real human translations as evaluation targets.
+
+### Goal
+
+Give the pipeline an objective external standard: if it can translate Homer's Odyssey *in the style of a specific known translator* and the output actually resembles that translator's work, the pipeline is demonstrably capable of executing on translation values. This sidesteps LLM self-judgment entirely — the ground truth is a real human translation.
+
+### Corpus
+
+Three open-access translations from Project Gutenberg, chosen for maximum stylistic contrast:
+
+| Translator | Year | Style | Key Character |
+|---|---|---|---|
+| George Chapman | 1616 | Verse (fourteener couplets) | Archaic, elaborative, Elizabethan, the translation Keats immortalized |
+| Butcher & Lang | 1879 | Archaic prose | Literal, scholarly, Biblical register ("thee/thou"), faithful |
+| Samuel Butler | 1900 | Plain prose | Accessible, modern for its era, readable over faithful |
+
+For each, a values profile is written from direct reading: philosophy, register, archaism level, epithet handling, sentence structure, taste decisions, and concrete pipeline instructions.
+
+Passage correspondence uses Homer's standard Book + line numbering (e.g. `Od. 5.1–20`), which is preserved across the Greek text and all translations.
+
+### Feedback Loop Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  For each evaluation run:                                   │
+│                                                             │
+│  1. Pick a translator (Chapman / Butcher&Lang / Butler)     │
+│  2. Randomly select 5 passages from the Greek Odyssey       │
+│     (Book + line range, ~15-20 lines each)                  │
+│  3. For each passage:                                       │
+│     a. Retrieve Greek text                                  │
+│     b. Retrieve known translator's English for that passage │
+│     c. Run sequential pipeline with translator's values     │
+│        as the preference prompt                             │
+│     d. Call comparison agent:                               │
+│        input:  (values profile, known passage, pipeline out)│
+│        output: score 0-10 + rationale                       │
+│  4. Log scores + rationale to runs/                         │
+│  5. Aggregate: mean score, worst passage, best passage      │
+└─────────────────────────────────────────────────────────────┘
+          │
+          ▼
+  Review scores + rationale
+  Identify failure mode (wrong register? too literal? too free?)
+  Improve pipeline (prompts, modules, feedback mechanisms)
+          │
+          ▼
+  Re-run on fresh random passages
+  Compare score deltas
+          │
+          ▼
+  Repeat
+```
+
+### Comparison Agent
+
+Single grok-4.1-fast call (with reasoning) per passage. Receives:
+- The translator's values profile (style, register, priorities)
+- The known translation's passage (ground truth)
+- The pipeline's output for the same Greek
+
+Returns JSON: `{ "score": 0-10, "rationale": "...", "key_gaps": ["..."] }`
+
+Score interpretation:
+- **0-3**: Wrong register, wrong approach, fundamental mismatch
+- **4-6**: Right direction but missing key style markers
+- **7-8**: Clearly in the same spirit, minor deviations
+- **9-10**: Could plausibly be mistaken for the actual translation
+
+### Passage Selection
+
+Random selection from a pre-built aligned pool (~30 passages across all 24 books). Each pool entry contains: `book`, `start_line`, `end_line`, `greek`, `butler`, `butcher_lang`, `chapman`. Pool is large enough that 5-passage runs don't repeat within a session.
+
+### Files
+
+```
+odyssey_eval/
+  __init__.py
+  profiles.py      # translator value profiles (from direct reading)
+  corpus.py        # load pool, get_passage(book, start, end)
+  pipeline.py      # run sequential pipeline on a single passage
+  compare.py       # comparison agent (grok call)
+  evaluate.py      # main loop: random passage selection, scoring, logging
+  build_pool.py    # one-time script to build aligned passage pool
+passages_pool.json # aligned Greek + 3 translations, ~30 passages
+```
+
+### Iteration Log
+
+| Run | Seed | Pipeline version | Butler avg | Butcher&Lang avg | Chapman avg | Notes |
+|---|---|---|---|---|---|---|
+| 1 | 42 | baseline (values_profile + sample passages in prompt) | 8.2 | 8.6 | 5.4 | Chapman rhyme consistently failed; all other style markers correct |
+| 2 | 43 | + rhyme-check judge + rhyme planning in translate prompt | 7.6 | **9.2** | **7.2** | Chapman +1.8; B&L +0.6; Butler variance (-0.6); Chapman rhyme improved but imperfect rhymes remain |
+
+**Key findings:**
+- Butler and Butcher&Lang score consistently 7.6-9.2 with sample passages in prompt alone.
+- Chapman's formal constraint (rhyming heroic couplets) requires explicit rhyme-planning and per-pair verification in the judge to execute reliably.
+- The judge's line-by-line rhyme check ("L1: 'way'/L2: 'stay' → RHYMES") gives specific actionable feedback that the next translate iteration can use.
+- Remaining Chapman gap: imperfect/slant rhymes and occasional scansion failures. Further improvement may need a dedicated "rhyme-correction polish" pass after the main iterate-judge loop.
+
 ## Future Ideas
--one of the 'standards' to judge the fidelity of a translation against is whether the main observations/arguments/commentary from classic (and classical) commentary works can be reproduced from the new translation.
+- One of the 'standards' to judge the fidelity of a translation against is whether the main observations/arguments/commentary from classic (and classical) commentary works can be reproduced from the new translation.
